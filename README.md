@@ -1,5 +1,9 @@
 # Project: A Facebook-like social media platform:
 
+## Description:
+
+
+
 ## Objective:
 Design and develop a Facebook-like social media platform that will have a number of different functionalities based on customer (TA) expectations.
 
@@ -12,4 +16,15 @@ them to be friend with others and enable them to interact with them.
 - A user should be able to like, comment and share the status/timeline post of their
 friends.
 
-## Language: C++
+## Features:
+
+
+## Language: C++ and Technique: Agile
+
+
+## Authors
+*Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196
+*Name*: Ezekiel Pulido *username*: ZekePulido *netid*: esp139
+*Name*: Andrew McBride *username*: Andrew McBride   *netid*: ahm228
+*Name*: Ruth Mfon-Uko *username*: ruthmfon  *netid*: rkm254
+*Name*: Kenneth Abrefa *username*: Kenn203  *netid*: ka1216
