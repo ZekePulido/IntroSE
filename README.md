@@ -23,8 +23,8 @@ friends.
 
 
 ## Authors
-*Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196
-*Name*: Ezekiel Pulido *username*: ZekePulido *netid*: esp139
-*Name*: Andrew McBride *username*: Andrew McBride   *netid*: ahm228
-*Name*: Ruth Mfon-Uko *username*: ruthmfon  *netid*: rkm254
-*Name*: Kenneth Abrefa *username*: Kenn203  *netid*: ka1216
+*Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196 <br>
+*Name*: Ezekiel Pulido *username*: ZekePulido *netid*: esp139 <br>
+*Name*: Andrew McBride *username*: Andrew McBride   *netid*: ahm228 <br>
+*Name*: Ruth Mfon-Uko *username*: ruthmfon  *netid*: rkm254 <br>
+*Name*: Kenneth Abrefa *username*: Kenn203  *netid*: ka1216 <br>
