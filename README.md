@@ -25,6 +25,20 @@ friends.
 ## Language: C++ and Technique: Agile
 
 
+## Usage:
+
+We are using a virtual environment with python. To use this environment use this command:
+
+```
+env\Scripts\activate.bat
+```
+
+To run this application you need to run this command inside of the socialmedia_app folder:
+
+```
+py manage.py runserver
+```
+
 ## Authors
 *Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196 <br>
 *Name*: Ezekiel Pulido *username*: ZekePulido *netid*: esp139 <br>
