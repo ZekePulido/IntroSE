@@ -22,11 +22,11 @@ friends.
 - Able to interact with friends upon accepting their friend requests.
 - Able to like, comment, and share the status/timeline posts of their friends.
 
-## Language: C++ and Technique: Agile
+## Language: Python and Technique: Agile
 
 
 ## Authors
 *Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196 <br>
-*Name*: Ezekiel Pulido *username*: ZekePulido *netid*: esp139 <br>
-*Name*: Andrew McBride *username*: ahm228   *netid*: ahm228 <br>
-*Name*: Ruth Mfon-Uko *username*: ruthmfon  *netid*: rkm254 <br>
+*Name*: Ezekiel Pulido   *username*: ZekePulido *netid*: esp139 <br>
+*Name*: Andrew McBride   *username*: ahm228     *netid*: ahm228 <br>
+*Name*: Ruth Mfon-Uko    *username*: ruthmfon   *netid*: rkm254 <br>
