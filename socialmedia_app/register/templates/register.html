@@ -4,30 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Page</title>
-    
-    <!-- CSS Styles -->
-    <style>
-        /* General page styling (you can reuse the existing CSS styles) */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            text-align: center;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Add custom style for form elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'register.css' %}">
 </head>
 <body>
     <div class="container">
@@ -58,7 +36,8 @@
             <button type="submit" class="btn">Create Account</button>
         </form>
         <!-- Login Link -->
-        <p>Already have an account? <a href="login.html" class="btn btn-login">Login</a></p>
+        <p>Already have an account? <a href="{% url 'login' %}" class="btn btn-login">Login</a></p>
+
     </div>
 </body>
 </html>
