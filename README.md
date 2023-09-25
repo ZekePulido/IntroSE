@@ -26,6 +26,8 @@ friends.
 
 
 ## Usage:
+Here is the walkthrough on setting Django up:
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment
 
 We are using a virtual environment with python. To use this environment use this command:
 
