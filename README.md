@@ -1,4 +1,4 @@
-# Project: A Facebook-like social media platform:
+# DawgSocial: A Facebook-like social media platform:
 ![Logo](https://github.com/spencerg11/IntroSE/assets/117400405/f1907416-dd39-4302-a656-62c75d9ee01e)
 
 ## Description:
