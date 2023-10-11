@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c^shlw_cx7e%m+e+qm1@i(g%xl-+8#$_m&9bt!$xf&9(ycw-xx'
+SECRET_KEY = 'django-insecure-2pn^oz!s*+-e-g)$3q($l+lf)qkws7t%m@3^_h4%8w53sy#h$x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,10 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'homepage',
-    'login',
-    'register',
+    'Main.apps.MainConfig',
+    'crispy_forms',
+    'crispy_bootstrap5'
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,10 +83,15 @@ WSGI_APPLICATION = 'DawgSocial.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'edb_admin',
+        'USER': 'edb_admin',
+        'PASSWORD': 'Password123!',
+        'HOST': 'p-t47pbp2c6k.pg.biganimal.io',  # Set this to your PostgreSQL server's hostname or IP address
+        'PORT': '',           # Leave empty to use the default PostgreSQL port (5432)
     }
 }
+
 
 
 # Password validation
@@ -124,3 +134,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = "/home"
+LOGOUT_REDIRECT_URL = "/login"
