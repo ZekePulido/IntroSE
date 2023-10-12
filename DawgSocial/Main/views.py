@@ -19,3 +19,7 @@ def register(request):
 
 
     return render(request, 'registration/register.html', {"form": form})
+
+
+def dashboard(request):
+    return render(request, 'Main/dashboard.html')

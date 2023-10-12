@@ -14,16 +14,24 @@
                     <a class="nav-link" href="/home">Home</a>
                 </li>
 
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Timeline</a>
+                </li>
+                {% else %}
+                {% endif %}
             </ul>
+            
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
                 <span class = 'navbar-text'>Logged in as {{user.username}} | </span>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
+
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/login">Login/Register</a>
                 </li>
                 {% endif %}
             </ul>
