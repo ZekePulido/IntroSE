@@ -27,13 +27,27 @@ friends.
 
 ## Usage:
 
-We are using a virtual environment with python. To use this environment use this command:
-
+1. To begin, install django:
+```
+pip install Django
+```
+2. You can create a virtual environment with these commands
+```
+pip install virtualenv
+```
+```
+virtualenv env
+```
+3. To activate this environment, you will use this command:
 ```
 env\Scripts\activate.bat
 ```
+4. To download the packages, use this command:
+```
+pip install -r requirements.txt
+```
 
-To run this application you need to run this command inside of the socialmedia_app folder:
+To run this application you need to run this command inside of the DawgSocial folder:
 
 ```
 py manage.py runserver
