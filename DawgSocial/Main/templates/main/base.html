@@ -10,15 +10,14 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark flex-nowrap">
         <div class="container-fluid">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/home">Home</a>
-                </li>
-
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="/dashboard">Timeline</a>
                 </li>
                 {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
                 {% endif %}
             </ul>
             
