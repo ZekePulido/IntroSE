@@ -1,4 +1,5 @@
-# Project: A Facebook-like social media platform:
+# DawgSocial: A Facebook-like social media platform:
+![Logo](https://github.com/spencerg11/IntroSE/assets/117400405/f1907416-dd39-4302-a656-62c75d9ee01e)
 
 ## Description:
 This project will be a Facebook-like social media platform that has many of the same features that Facebook has. It will have things like accounts, friends, and the ability to like, comment, and share other people's posts.
@@ -26,6 +27,8 @@ friends.
 
 
 ## Usage:
+Here is the walkthrough on setting Django up:
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment
 
 1. To begin, install django:
 ```
