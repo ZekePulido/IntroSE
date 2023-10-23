@@ -23,3 +23,6 @@ def register(request):
 
 def dashboard(request):
     return render(request, 'Main/dashboard.html')
+
+def profile(request):
+    return render(request,'Main/profile.html')
