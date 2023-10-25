@@ -19,6 +19,15 @@
             <h2>Posts</h2>
             <p>Where the posts will be located.</p>
         </div>
+        <div class="flex-item">
+            <h1>Welcome {{user.username}}!</h1>
+            {% if userprofile.image %}
+            <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+            {% else %}
+            <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+            {% endif %}
+        </div>
+
     </div>
 </body>
 </html>

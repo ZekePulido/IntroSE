@@ -3,7 +3,14 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-  <!-- User Profile Header -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
+</head>
+<body>
+  
+ <!-- User Profile Header -->
   <header class="user-header">
     <h1>Welcome, {{ user.username }}!</h1>
     <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
@@ -24,4 +31,11 @@
         <p class="no-bio">User hasn't added a bio yet.</p>
     {% endif %}
   </section>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            {{ profile_form.as_p}}
+        <button type="submit" id="saveButton">Save</button>
+    </form>
+</body>
+</html>
 {% endblock %}

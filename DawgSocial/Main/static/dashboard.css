@@ -14,6 +14,12 @@
     box-sizing: border-box; 
 }
 
+.profile-image {
+    max-width: 150px; 
+    max-height: 150px; 
+}
+
+
 @media (max-width: 768px) {
     .flex-container {
         flex-direction: column;
@@ -22,3 +28,4 @@
         width: 100%;
     }
 }
+
