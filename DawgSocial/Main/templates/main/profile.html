@@ -2,5 +2,18 @@
 {% load static %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-<h1>Welcome {{user.username}}! </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
+</head>
+<body>
+    <h1>Welcome {{ user.username }}!</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            {{ profile_form.as_p}}
+        <button type="submit" id="saveButton">Save</button>
+    </form>
+</body>
+</html>
 {% endblock %}
