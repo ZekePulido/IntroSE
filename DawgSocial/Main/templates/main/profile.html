@@ -1,6 +1,27 @@
 {% extends 'Main/base.html' %}
 {% load static %}
 {% block title %}Profile{% endblock %}
+
 {% block content %}
-<h1>Welcome {{user.username}}! </h1>
+  <!-- User Profile Header -->
+  <header class="user-header">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
+  </header>
+
+<!-- User Birthday Section -->
+<section class="user-birthday">
+    <h2>Birthday:</h2>
+    <p>{{ user.birthday }}</p>
+</section>
+
+  <!-- User Bio Section -->
+  <section class="user-bio">
+    <h2>Bio:</h2>
+    {% if user.bio %}
+        <p>{{ user.bio }}</p>
+    {% else %}
+        <p class="no-bio">User hasn't added a bio yet.</p>
+    {% endif %}
+  </section>
 {% endblock %}
