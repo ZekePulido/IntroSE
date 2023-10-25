@@ -20,3 +20,13 @@ class ProfileImageForm(forms.ModelForm):
     class Meta:
         model = UserProfile  
         fields = ['image']
+
+class UpdateProfileForm(forms.ModelForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    birthday = forms.DateField(required=True, widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 4}), label="Bio (optional)")
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'birthday', 'bio']
