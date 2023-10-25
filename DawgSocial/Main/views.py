@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, ProfileImageForm
+from .forms import RegisterForm, ProfileImageForm, UpdateProfileForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -35,17 +37,25 @@ def dashboard(request):
     }
     return render(request, 'Main/dashboard.html', context)
 
+@login_required
 def profile(request):
     # Fetch the current user's profile
     profile_user = UserProfile.objects.get(user__id=request.user.id)
+    edit_mode = 'edit' in request.GET
 
-    if request.user.is_authenticated:
+    if edit_mode:
         if request.method == 'POST':
+            update_form = UpdateProfileForm(request.POST, instance=request.user)
             profile_form = ProfileImageForm(request.POST, request.FILES, instance=profile_user)
-            if profile_form.is_valid():
+
+            if update_form.is_valid() and profile_form.is_valid():
+                update_form.save()
                 profile_form.save()
-                
-                # Code to clear all media files except the current picture
+
+                # Notify user of update success
+                messages.success(request, "Your profile was successfully updated.")
+
+                # Clear all media files except current profile picture
                 media_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
                 current_picture = profile_form.instance.image.name
 
@@ -55,9 +65,21 @@ def profile(request):
                         media_storage.delete(file_path)
 
                 return redirect('profile')
+
+            else:
+                messages.error(request, "There was an error updating your profile.")
         else:
+            update_form = UpdateProfileForm(instance=request.user)
             profile_form = ProfileImageForm(instance=profile_user)
     else:
-        return redirect('home')
+        update_form = None
+        profile_form = ProfileImageForm(instance=profile_user)
 
-    return render(request, 'Main/profile.html', {'profile_form': profile_form})
+    context = {
+        'profile_form': profile_form,
+        'edit_mode': edit_mode,
+        'form': update_form
+    }
+
+    return render(request, 'Main/profile.html', context)
+
