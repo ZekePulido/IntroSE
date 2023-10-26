@@ -76,9 +76,10 @@ def profile(request):
         profile_form = ProfileImageForm(instance=profile_user)
 
     context = {
-        'profile_form': profile_form,
-        'edit_mode': edit_mode,
-        'form': update_form
+    'profile_form': profile_form,
+    'edit_mode': edit_mode,
+    'form': update_form,
+    'profile_user': profile_user
     }
 
     return render(request, 'Main/profile.html', context)
