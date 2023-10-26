@@ -28,5 +28,5 @@ class UpdateProfileForm(forms.ModelForm):
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 4}), label="Bio (optional)")
 
     class Meta:
-        model = User
+        model = UserProfile
         fields = ['first_name', 'last_name', 'birthday', 'bio']

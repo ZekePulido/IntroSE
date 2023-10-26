@@ -42,21 +42,21 @@
   
 {% else %}
   <!-- View Mode: Show the profile information -->
-  <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
-  <section class="user-birthday">
-      <h2>Birthday:</h2>
-      <p>{{ user.birthday }}</p>
-  </section>
-  <section class="user-bio">
-      <h2>Bio:</h2>
-      <p>
-          {% if user.bio %}
-              {{ user.bio }}
-          {% else %}
-              User hasn't added a bio yet.
-          {% endif %}
-      </p>
-  </section>
+<h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
+<section class="user-birthday">
+    <h2>Birthday:</h2>
+    <p>{{ profile_user.birthday }}</p>
+</section>
+<section class="user-bio">
+    <h2>Bio:</h2>
+    <p>
+        {% if profile_user.bio %}
+            {{ profile_user.bio }}
+        {% else %}
+            User hasn't added a bio yet.
+        {% endif %}
+    </p>
+</section>
 
   <!-- Option to change profile picture -->
   <section class="user-image">
