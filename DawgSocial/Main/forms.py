@@ -18,7 +18,7 @@ class RegisterForm(UserCreationForm):
 class ProfileImageForm(forms.ModelForm):
     image=forms.ImageField(label="Profile")
     class Meta:
-        model = UserProfile  
+        model = User  
         fields = ['image']
 
 class UpdateProfileForm(forms.ModelForm):

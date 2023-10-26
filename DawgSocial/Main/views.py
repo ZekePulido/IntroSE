@@ -45,17 +45,12 @@ def profile(request):
 
     if edit_mode:
         if request.method == 'POST':
-            update_form = UpdateProfileForm(request.POST, instance=profile_user)
+            update_form = UpdateProfileForm(request.POST, instance=request.user)
             profile_form = ProfileImageForm(request.POST, request.FILES, instance=profile_user)
 
             if update_form.is_valid() and profile_form.is_valid():
                 profile = update_form.save(commit=False)
-                user = request.user
-                user.first_name = update_form.cleaned_data['first_name']
-                user.last_name = update_form.cleaned_data['last_name']
-                user.save()
-                profile.user = user
-                profile.save()
+                update_form.save()
                 profile_form.save()
 
                 # Notify user of update success
