@@ -17,12 +17,25 @@
 
 {% if edit_mode %}
   <!-- Edit Mode: Show the profile form for editing -->
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
+
+      <!-- Image Upload Field -->
+      <label for="{{ profile_form.image.id_for_label }}">Profile Picture:</label>
+      {{ profile_form.image }}
+
+      <label for="{{ form.first_name.id_for_label }}">First Name:</label>
+      {{ form.first_name }}
+
+      <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
+      {{ form.last_name }}
+
       <label for="{{ form.birthday.id_for_label }}">Birthday:</label>
       {{ form.birthday }}
+
       <label for="{{ form.bio.id_for_label }}">Bio:</label>
       {{ form.bio }}
+
       <button type="submit">Update Profile</button>
   </form>
   <a href="/profile">Cancel</a>
@@ -44,6 +57,17 @@
           {% endif %}
       </p>
   </section>
+
+  <!-- Option to change profile picture -->
+  <section class="user-image">
+      <h2>Profile Picture:</h2>
+      {% if profile_user.image %}
+          <img src="{{ profile_user.image.url }}" alt="User profile picture">
+      {% else %}
+          No profile picture set.
+      {% endif %}
+  </section>
+
   <a href="?edit=true">Edit Profile</a>
 {% endif %}
 
