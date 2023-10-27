@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from django.contrib.auth import update_session_auth_hash
 import os
 
 # Create your views here.
@@ -68,4 +68,3 @@ def profile_update(request):
         'user_form': user_form,
         'profile_form': profile_form,
     })
-
