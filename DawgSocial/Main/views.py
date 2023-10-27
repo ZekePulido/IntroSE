@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, ProfileImageForm
+from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm
 from django.contrib.auth import login, logout, authenticate
-from .models import UserProfile
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import Profile
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import os
@@ -17,7 +19,7 @@ def register(request):
             user = form.save()
             login(request, user)
 
-            profile = UserProfile(user=user)
+            profile = Profile(user=user)
             profile.save()
 
             return redirect('/home')
@@ -29,35 +31,41 @@ def register(request):
 
 
 def dashboard(request):
-    userprofile = UserProfile.objects.get(user=request.user)
+    userprofile = Profile.objects.get(user=request.user)
     context = {
         'userprofile': userprofile,
     }
     return render(request, 'Main/dashboard.html', context)
 
+@login_required
 def profile(request):
-    # Fetch the current user's profile
-    profile_user = UserProfile.objects.get(user__id=request.user.id)
+    userprofile = Profile.objects.get(user=request.user)
+    context = {
+        'userprofile': userprofile,
+    }
+    return render(request, 'Main/profile.html',context)
 
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            profile_form = ProfileImageForm(request.POST, request.FILES, instance=profile_user)
-            if profile_form.is_valid():
-                profile_form.save()
-                
-                # Code to clear all media files except the current picture
-                media_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
-                current_picture = profile_form.instance.image.name
+@login_required
+def profile_update(request):
+    user = request.user
+    profile_user = request.user.profile
+    
 
-                for filename in media_storage.listdir('')[1]:
-                    if filename != current_picture:
-                        file_path = media_storage.url(filename)
-                        media_storage.delete(file_path)
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile_user)
 
-                return redirect('profile')
-        else:
-            profile_form = ProfileImageForm(instance=profile_user)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()  # Update user information
+            profile_form.save()  # Update profile information
+            messages.success(request, 'Your profile was successfully updated.')
+            return redirect('profile')
     else:
-        return redirect('home')
+        user_form = UpdateUserForm(instance=user)
+        profile_form = ProfileUpdateForm(instance=profile_user)
 
-    return render(request, 'Main/profile.html', {'profile_form': profile_form})
+    return render(request, 'Main/profile_update.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    })
+

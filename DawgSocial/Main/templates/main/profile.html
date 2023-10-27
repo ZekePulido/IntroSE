@@ -1,10 +1,9 @@
 {% extends 'Main/base.html' %}
 {% load static %}
 {% block title %}Profile{% endblock %}
-
 {% block content %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
 </head>
@@ -13,29 +12,31 @@
  <!-- User Profile Header -->
   <header class="user-header">
     <h1>Welcome, {{ user.username }}!</h1>
+    {% if userprofile.image %}
+    <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+    {% else %}
+    <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+    {% endif %}
     <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
   </header>
 
 <!-- User Birthday Section -->
 <section class="user-birthday">
-    <h2>Birthday:</h2>
-    <p>{{ user.birthday }}</p>
+    <h2>Birthday: {{ userprofile.birthday }}</h1>
 </section>
 
   <!-- User Bio Section -->
   <section class="user-bio">
     <h2>Bio:</h2>
-    {% if user.bio %}
-        <p>{{ user.bio }}</p>
+    {% if userprofile.bio %}
+        <p>{{ userprofile.bio }}</p>
     {% else %}
         <p class="no-bio">User hasn't added a bio yet.</p>
     {% endif %}
   </section>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-            {{ profile_form.as_p}}
-        <button type="submit" id="saveButton">Save</button>
-    </form>
+    <a href="{% url 'profile_update' %}" class="profile-update-button">
+        <button type="button">Update Profile</button>
+    </a>
 </body>
 </html>
 {% endblock %}

@@ -10,6 +10,7 @@ urlpatterns = [
     path('register',views.register, name='register'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('profile', views.profile, name='profile'),
+    path('profile_update', views.profile_update, name='profile_update')
 ]
 
 if settings.DEBUG:
