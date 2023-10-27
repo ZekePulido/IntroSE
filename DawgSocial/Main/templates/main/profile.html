@@ -1,76 +1,42 @@
 {% extends 'Main/base.html' %}
 {% load static %}
 {% block title %}Profile{% endblock %}
-
 {% block content %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
 </head>
 <body>
   
-<!-- User Profile Header -->
-<header class="user-header">
-  <h1>Welcome, {{ user.username }}!</h1>
-</header>
+ <!-- User Profile Header -->
+  <header class="user-header">
+    <h1>Welcome, {{ user.username }}!</h1>
+    {% if userprofile.image %}
+    <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+    {% else %}
+    <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+    {% endif %}
+    <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
+  </header>
 
-{% if edit_mode %}
-  <!-- Edit Mode: Show the profile form for editing -->
-  <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
+<!-- User Birthday Section -->
+<section class="user-birthday">
+    <h2>Birthday: {{ userprofile.birthday }}</h1>
+</section>
 
-      <!-- Image Upload Field -->
-      <label for="{{ profile_form.image.id_for_label }}">Profile Picture:</label>
-      {{ profile_form.image }}
-
-      <label for="{{ form.first_name.id_for_label }}">First Name:</label>
-      {{ form.first_name }}
-
-      <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
-      {{ form.last_name }}
-
-      <label for="{{ form.birthday.id_for_label }}">Birthday:</label>
-      {{ form.birthday }}
-
-      <label for="{{ form.bio.id_for_label }}">Bio:</label>
-      {{ form.bio }}
-
-      <button type="submit">Update Profile</button>
-  </form>
-  <a href="/profile">Cancel</a>
-  
-{% else %}
-  <!-- View Mode: Show the profile information -->
-  <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
-  <section class="user-birthday">
-      <h2>Birthday:</h2>
-      <p>{{ user.birthday }}</p>
-  </section>
+  <!-- User Bio Section -->
   <section class="user-bio">
-      <h2>Bio:</h2>
-      <p>
-          {% if user.bio %}
-              {{ user.bio }}
-          {% else %}
-              User hasn't added a bio yet.
-          {% endif %}
-      </p>
+    <h2>Bio:</h2>
+    {% if userprofile.bio %}
+        <p>{{ userprofile.bio }}</p>
+    {% else %}
+        <p class="no-bio">User hasn't added a bio yet.</p>
+    {% endif %}
   </section>
-
-  <!-- Option to change profile picture -->
-  <section class="user-image">
-      <h2>Profile Picture:</h2>
-      {% if profile_user.image %}
-          <img src="{{ profile_user.image.url }}" alt="User profile picture">
-      {% else %}
-          No profile picture set.
-      {% endif %}
-  </section>
-
-  <a href="?edit=true">Edit Profile</a>
-{% endif %}
-
+    <a href="{% url 'profile_update' %}" class="profile-update-button">
+        <button type="button">Update Profile</button>
+    </a>
 </body>
 </html>
 {% endblock %}
