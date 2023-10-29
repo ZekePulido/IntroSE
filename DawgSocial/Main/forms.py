@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
+from .models import Post
 
 class RegisterForm(UserCreationForm):
     first_name = forms.CharField(required=True)
@@ -26,5 +27,13 @@ class UpdateUserForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
 
+class PostForm(forms.ModelForm):
+    caption =forms.CharField(required=False)
 
+    class Meta:
+        model = Post
+        fields = ['content', 'caption']
+        widgets= {
+            'content': forms.FileInput(attrs={'accept': 'image/*,video/*'})
+        }
 

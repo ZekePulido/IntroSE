@@ -1,0 +1,19 @@
+{% extends 'Main/base.html' %}
+
+{% block content %}
+
+<h3>Are you sure you want to delete this post?</h3>
+<img src="{{ post.content.url }}" alt="Post media file">
+<p>{{ post.caption }}</p>
+<form method="post">
+    {% csrf_token %}
+    <label>
+        <input type="radio" name="delete_choice" value="yes" required> Yes, Delete
+    </label>
+    <label>
+        <input type="radio" name="delete_choice" value="no" required> No, Keep it
+    </label>
+    <button type="submit">Confirm Choice</button>
+</form>
+
+{% endblock %}

@@ -6,6 +6,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
+
 </head>
 <body>
     <h1> Welcome to the dashboard! </h1>
@@ -17,8 +18,17 @@
 
         <div class= "flex-item">
             <h2>Posts</h2>
-            <p>Where the posts will be located.</p>
+            <a href="{%url 'create_post' %}"><button>Create Post</button></a> 
+            {% for post in posts%}
+                <div class="post">
+                    <img src="{{ post.media_file.url }}" alt="Post media file">
+                    <p>{{ post.content }}</p>
+                    <a href="{% url 'edit_post' post.id %}">Edit</a>
+                    <a href="{% url 'delete_post' post.id %}">Delete</a>
+                </div>
+            {% endfor %}
         </div>
+        
         <div class="flex-item">
             <h1>Welcome {{user.username}}!</h1>
             {% if userprofile.image %}
