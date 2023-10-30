@@ -33,8 +33,8 @@ def register(request):
 
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
-    posts = Post.objects.all
 
+    posts = Post.objects.all
     context = {
         'userprofile': userprofile,
         'posts': posts
@@ -75,12 +75,14 @@ def profile_update(request):
 
 @login_required
 def create_post(request):
+    print(request.user.is_authenticated)
+    print(request.user.username)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()      # post = form.save(commit=False)
-            #post.author = request.user # modify the post objec before saving it 
-            #post.save()
+            post = form.save(commit=False)      # post = form.save(commit=False)
+            post.user = request.user # modify the post objec before saving it 
+            post.save()
             messages.success(request, 'You have successfully created a post')
             return redirect('dashboard')
     else:
@@ -95,7 +97,9 @@ def edit_post(request, post_id):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            form.save()
+            #post.content = form.cleaned_data['content']
+            #post.caption = form.cleaned_data['caption']
+            post.save()
             messages.success(request, 'Your post was successfully updated.')
             return redirect('dashboard')
     else:
