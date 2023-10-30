@@ -33,8 +33,11 @@ def register(request):
 
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
+    posts = Post.objects.filter(user=request.user).order_by('-created_at')
+
     context = {
         'userprofile': userprofile,
+        'posts': posts
     }
     return render(request, 'Main/dashboard.html', context)
 

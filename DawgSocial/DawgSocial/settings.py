@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'edb_admin',
         'USER': 'edb_admin',
         'PASSWORD': 'Password123!',
-        'HOST': 'p-t47pbp2c6k.pg.biganimal.io',  # Set this to your PostgreSQL server's hostname or IP address
+        'HOST': 'p-495s2rq9vm.pg.biganimal.io',  # Set this to your PostgreSQL server's hostname or IP address
         'PORT': '',           # Leave empty to use the default PostgreSQL port (5432)
     }
 }
