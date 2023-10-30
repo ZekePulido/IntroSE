@@ -13,12 +13,12 @@ class Profile(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.ImageField(upload_to='media/')
+    content = models.ImageField(null=True, blank=True, upload_to='media/')
     caption = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now= True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return  f'{self.user.username} - {self.created_at.strftime("%Y-%m-%d %H:%M:%S")}'
+        return f'{self.user.username} - {self.created_at.strftime("%Y-%m-%d %H:%M:%S")}'
 
     

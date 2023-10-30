@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 import os
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -76,7 +77,7 @@ def profile_update(request):
 @login_required
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES, user=request.user)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()      # post = form.save(commit=False)
             #post.author = request.user # modify the post objec before saving it 
@@ -90,17 +91,24 @@ def create_post(request):
 
 @login_required
 def edit_post(request, post_id):
-    post = get_object_or_404(Post, id = post_id, user=request.user)
     if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        post = get_object_or_404(Post, id=post_id, user=request.user)
         form = PostForm(request.POST, request.FILES, instance=post)
+
         if form.is_valid():
             form.save()
             messages.success(request, 'Your post was successfully updated.')
-            return redirect('dashboard')
-    else:
-        form = PostForm(instance=post)
-    
-    return render(request, 'Main/edit_post.html', {'form':form})
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False})
+
+    context = {
+        'form': form,
+        'post': post,
+    }
+
+    return render(request, 'Main/edit_post.html', context)
 
 
 @login_required
