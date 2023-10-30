@@ -16,20 +16,82 @@
             <p>Where the list of friends will be displayed.</p>
         </div>
 
-        <div class= "flex-item">
+        <div class="flex-item">
             <h2>Posts</h2>
-            <a href="{% url 'create_post' %}"><button>Create Post</button></a> 
             {% for post in posts %}
                 <div class="post">
-                    <img src="{{ post.content.url }}" alt="Post media file">
+                    {% if post.content %}
+                    <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
+                    {% else %}
+                    <p>Post not available</p>
+                    {% endif %}
+                    
                     <p>{{ post.caption }}</p>
-                    <a href="{% url 'edit_post' post.id %}">Edit</a>
-                    <a href="{% url 'delete_post' post.id %}">Delete</a>
+                    
+                    <div class="post-actions">
+                        <!-- Button to toggle edit mode -->
+                        <button class="edit-button" data-post-id="{{ post.id }}">Edit</button>
+                        
+                        <!-- Edit form for the post (initially hidden) -->
+                        <form class="edit-form" data-post-id="{{ post.id }}" method="post" enctype="multipart/form-data" style="display: none;">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <label for="caption">Edit Caption:</label>
+                            <input type="text" name="caption" value="{{ post.caption }}">
+                            <input type="file" name="content">
+                            <button type="submit">Save Changes</button>
+                        </form>
+                    </div>
                 </div>
             {% endfor %}
         </div>
         
+        <script>
+            
+            // JavaScript to handle the "Edit" button click event
+            document.querySelectorAll('.edit-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post-id');
+                    const editForm = document.querySelector(`.edit-form[data-post-id="${postId}"]`);
+                    
+                    if (editForm) {
+                        // Toggle the visibility of the edit form
+                        if (editForm.style.display === 'none') {
+                            editForm.style.display = 'block';
+                        } else {
+                            editForm.style.display = 'none';
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.edit-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Prevent the default form submission
         
+                    const postId = this.getAttribute('data-post-id');
+                    const formData = new FormData(this);
+        
+                    fetch(`/edit_post/`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': csrftoken // Ensure you have the csrf token set correctly
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle the response (e.g., show success message, update the UI, etc.)
+                        if (data.success) {
+                            alert('Post updated successfully!');
+                        } else {
+                            alert('An error occurred while updating the post.');
+                        }
+                    });
+                });
+            });
+        </script>
+          
         <div class="flex-item">
             <h1>Welcome {{user.username}}!</h1>
             {% if userprofile.image %}
@@ -37,6 +99,8 @@
             {% else %}
             <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
             {% endif %}
+            <br>
+            <a href="{% url 'create_post' %}"><button>Create Post</button></a> 
         </div>
 
     </div>
