@@ -37,3 +37,4 @@ class PostForm(forms.ModelForm):
             'content': forms.FileInput(attrs={'accept': 'image/*,video/*'})
         }
 
+

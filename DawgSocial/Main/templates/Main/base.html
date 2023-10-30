@@ -11,9 +11,13 @@
         <div class="container-fluid">
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
-                <li class='nav-item'>
-                    <a class='nav-link' href='/profile'>Profile</a>
-                </li>
+                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Profile
+                </a>
+                <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                    <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                    <a class="dropdown-item" href="{% url 'profile_update' %}">Update Profile</a>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link" href="/dashboard">Timeline</a>
                 </li>
