@@ -3,7 +3,7 @@
 {% block content %}
 
 <h3>Are you sure you want to delete this post?</h3>
-<img src="{{ post.content.url }}" alt="Post media file">
+<img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;"alt="Post media file">
 <p>{{ post.caption }}</p>
 <form method="post">
     {% csrf_token %}

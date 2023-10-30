@@ -19,11 +19,10 @@
         <div class= "flex-item">
             <h2>Posts</h2>
 
-	     <a href="{% url 'create_post' %}"><button>Create Post</button></a>
             {% for post in posts %}
                 <div class="post">
                     {% if post.content %}
-                    <img src="{{ post.content.url }}" style="max-width: 50px; max-height: 50px;" alt="Post media file">
+                    <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
                     {% else %}
                     <p>Post not available</p>
                     {% endif %}

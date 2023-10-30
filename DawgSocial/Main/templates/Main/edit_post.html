@@ -11,9 +11,9 @@
     
     <!-- Display the current uploaded file as an image, if it exists -->
     {% if form.instance.content %}
-    <img src="{{ form.instance.content.url }}" alt="Current media file">
+    <img src="{{ form.instance.content.url }}" style="max-width: 100px; max-height: 100px;"alt="Current media file">
     {% endif %}
-    
+     
     <!-- Render caption textarea -->
     <label for="{{ form.caption.id_for_label }}">Edit Caption:</label>
     {{ form.caption }}
