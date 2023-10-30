@@ -33,7 +33,7 @@ def register(request):
 
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
-    posts = Post.objects.filter(user=request.user).order_by('-created_at')
+    posts = Post.objects.all
 
     context = {
         'userprofile': userprofile,
@@ -76,7 +76,7 @@ def profile_update(request):
 @login_required
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
+        form = PostForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             form.save()      # post = form.save(commit=False)
             #post.author = request.user # modify the post objec before saving it 
