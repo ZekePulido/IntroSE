@@ -1,0 +1,20 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel = "stylesheet" type="text/css" href="{%static 'create_post.css' %}">
+</head>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="{{ form.content.id_for_label }}">Upload Post:</label>
+    {{ form.content }}
+    
+    <!-- Render caption textarea -->
+    <label for="{{ form.caption.id_for_label }}">Caption:</label>
+    {{ form.caption }}
+    
+    <button type="submit">POST</button>
+</form>
+
+{% endblock %}
