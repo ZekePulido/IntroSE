@@ -29,3 +29,15 @@
     }
 }
 
+.action-link {
+    background-color: transparent;
+    color: #007BFF;
+    margin-right: 0;
+    padding: 5px;
+    text-decoration: none;
+}
+.action-link:hover {
+    background-color: transparent;
+    color: #0056b3;
+}
+
