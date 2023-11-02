@@ -5,12 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Post, Profile
 from django.conf import settings
-<<<<<<< HEAD
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
-=======
-from django.contrib.auth import update_session_auth_hash
->>>>>>> c111f6d10f1716aeb0bdcde6b96615b4b4c6d922
 import os
 
 # Create your views here.
@@ -76,7 +72,6 @@ def profile_update(request):
         'user_form': user_form,
         'profile_form': profile_form,
     })
-<<<<<<< HEAD
 
 @login_required
 def create_post(request):
@@ -126,5 +121,3 @@ def delete_post(request, post_id):
             return redirect('dashboard')
     
     return render(request, 'Main/delete_post.html', {'post':post})
-=======
->>>>>>> c111f6d10f1716aeb0bdcde6b96615b4b4c6d922
