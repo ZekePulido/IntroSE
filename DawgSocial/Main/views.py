@@ -3,11 +3,13 @@ from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Post, Profile
+from .models import Post, Profile, Friend_Request
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import User
+from django.db.models import Q
 import os
 
 # Create your views here.
@@ -32,10 +34,12 @@ def register(request):
     return render(request, 'registration/register.html', {"form": form})
 
 
+@login_required
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
+    
 
-    posts = Post.objects.all
+    posts = Post.objects.all()
     context = {
         'userprofile': userprofile,
         'posts': posts
@@ -122,3 +126,53 @@ def delete_post(request, post_id):
             return redirect('dashboard')
     
     return render(request, 'Main/delete_post.html', {'post':post})
+
+@login_required
+def send_friend_request(request, user_id):
+    to_user = User.objects.get(id=user_id)
+    from_user = request.user
+    if to_user != from_user:
+        friend_request, created = Friend_Request.objects.get_or_create(
+            from_user=from_user, to_user=to_user
+        )
+        if created:
+            messages.success(request, 'Friend request sent successfully.')
+        else:
+            messages.info(request, 'Friend request already sent.')
+
+    return redirect('dashboard')
+
+
+@login_required
+def accept_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.to_user.profile.friends.add(friend_request.from_user)
+        friend_request.from_user.profile.friends.add(friend_request.to_user)
+        friend_request.delete()
+        messages.success(request, 'Friend request accepted')
+    else:
+        messages.error(request, 'Friend request not accepted')
+
+    return redirect('dashboard')
+
+
+@login_required
+def viewing_page(request):
+    friends = request.user.profile.friends.all()
+    allusers = User.objects.exclude(Q(id=request.user.id) | Q(id__in=friends))
+
+    context = {
+        'allusers': allusers,
+    }
+    return render(request, 'Main/all_users.html', context)
+
+@login_required
+def accept_page(request):
+    all_friend_requests = Friend_Request.objects.filter(to_user=request.user)
+    return render(request, 'Main/accept_users.html', {'all_friend_requests': all_friend_requests})
+
+@login_required
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'Main/user_profile.html', {'user': user})
