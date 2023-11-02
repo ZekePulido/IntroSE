@@ -1,0 +1,14 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block title %}Friend Requests{% endblock %}
+{% block content %}
+
+<h1>Friend Requests</h1>
+
+{% for friend_request in all_friend_requests %}
+    <h1>{{ friend_request.from_user.username }}
+        <a href="{% url 'accept_friend_request' friend_request.id %}">Accept friend request</a>
+    </h1>
+{% endfor %}
+
+{% endblock %}

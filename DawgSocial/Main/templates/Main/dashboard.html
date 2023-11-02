@@ -6,19 +6,21 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
-
 </head>
 <body>
-    <h1> Welcome to the dashboard! </h1>
+    <h1>Welcome to the dashboard!</h1>
     <div class="flex-container">
         <div class="flex-item">
             <h2>Friend List:</h2>
-            <p>Where the list of friends will be displayed.</p>
+            <ul>
+                {% for friend in request.user.profile.friends.all %}
+                    <li><a href="{% url 'user_profile' friend.username %}">{{ friend.username }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
 
-        <div class= "flex-item">
+        <div class="flex-item">
             <h2>Posts</h2>
-
             {% for post in posts %}
                 <div class="post">
                     {% if post.content %}
@@ -27,25 +29,22 @@
                     <p>Post not available</p>
                     {% endif %}
                     <p>{{ post.caption }}</p>
-
-                    <a href="{% url 'edit_post' post.id %}">Edit</a>
-                    <a href="{% url 'delete_post' post.id %}">Delete</a>
+                    <a href="{% url 'edit_post' post.id %}" class="btn btn-success">Edit</a>
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
                 </div>
             {% endfor %}
         </div>
-        
-        
+
         <div class="flex-item">
-            <h1>Welcome {{user.username}}!</h1>
+            <h1>Welcome {{ user.username }}!</h1>
             {% if userprofile.image %}
-            <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+            <img src="{{ userprofile.image.url }}" class="profile-image">
             {% else %}
-            <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+            <img src="{% static 'default-avatar.png' %}" class="profile-image" alt="Default Avatar">
             {% endif %}
             <br>
-            <a href="{% url 'create_post' %}"><button>Create Post</button></a> 
+            <a href="{% url 'create_post' %}" class="btn btn-success">Create Post</a>
         </div>
-
     </div>
 </body>
 </html>
