@@ -1,21 +1,25 @@
 .flex-container {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
     justify-content: space-between;
+    align-items: center;
+    margin: 0;
 }
 
-.flex-item {
+.flex-item{
     flex: 1;
-    margin: 10px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    text-align: center;
-    box-sizing: border-box;
+    padding: 0px;
+    margin: 0;
 }
+
 
 .profile-image {
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+    margin-left: auto;
 }
 
 .edit-button {
@@ -35,6 +39,20 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.btn-light-pink {
+    background-color: #FFB6C1; 
+    border-color: #FFB6C1;
+    color: white; 
+}
+
+
+.btn-light-pink:hover {
+    background-color: #FF69B4; 
+    border-color: #FF69B4;
+    color: white;
+}
+
 
 @media (max-width: 768px) {
     .flex-container {

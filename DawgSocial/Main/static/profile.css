@@ -66,3 +66,18 @@ body {
 #saveButton:hover {
     background: #0056b3;
 }
+
+
+
+.flex-item {
+    flex: 1;
+    padding: 0px;
+}
+
+
+.content-container {
+    margin: 0 auto; 
+    width: 70%; 
+    text-align: left; 
+}
+
