@@ -1,0 +1,64 @@
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+
+.flex-item{
+    flex: 1;
+    padding: 0px;
+    margin: 0;
+}
+
+
+.profile-image {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+    margin-left: auto;
+}
+
+.edit-button {
+    background-color: green;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-button {
+    background-color: red;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-light-pink {
+    background-color: #FFB6C1; 
+    border-color: #FFB6C1;
+    color: white; 
+}
+
+
+.btn-light-pink:hover {
+    background-color: #FF69B4; 
+    border-color: #FF69B4;
+    color: white;
+}
+
+
+@media (max-width: 768px) {
+    .flex-container {
+        flex-direction: column;
+    }
+    .flex-item {
+        width: 100%;
+    }
+}
