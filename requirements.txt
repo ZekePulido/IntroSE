@@ -20,7 +20,7 @@ Pillow==9.0.0
 psycopg==3.0.0
 psycopg2-binary==2.9.1
 pyparsing==3.0.0
-PyQt5==5.0.0
+PyQt5==5.15.0
 PyQt5-Qt5==5.0.0
 PyQt5-sip==12.0.0
 python-dateutil==2.0
