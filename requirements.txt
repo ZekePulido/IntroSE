@@ -1,5 +1,5 @@
 asgiref==3.7.2
-contourpy==1.1.1
+contourpy>=1.0.0,<=1.1.1
 crispy==0.7.4
 crispy-bootstrap5==0.7
 cycler==0.12.0
