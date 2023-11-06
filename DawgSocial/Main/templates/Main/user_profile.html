@@ -2,11 +2,62 @@
 {% load static %}
 {% block title %}User Profile{% endblock %}
 {% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
+</head>
+<body style="background-color: #CFCFC4;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- User Profile Header -->
+                <header class="user-header">
+                    {% if friend.profile.image %}
+                        <img src="{{ friend.profile.image.url }}" style="max-width: 150px; max-height: 150px;">
+                    {% else %}
+                        <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+                    {% endif %}
+                    <h2 class="user-fullname">{{ friend.first_name }} {{ friend.last_name }}</h2>
+                </header>
 
-<h1>User Profile</h1>
+                <!-- User Birthday Section -->
+                <section class="user-birthday">
+                    <h2>Birthday: {{ friend.profile.birthday }}</h2>
+                </section>
 
-<h2>{{ user.username }}</h2>
-<p>Email: {{ user.email }}</p>
-<!-- Add other profile details you want to display here -->
-
+                <!-- User Bio Section -->
+                <section class="user-bio">
+                    <h2>Bio:</h2>
+                    {% if friend.profile.bio %}
+                        <p>{{ friend.profile.bio }}</p>
+                    {% else %}
+                        <p class="no-bio">User hasn't added a bio yet.</p>
+                    {% endif %}
+                </section>
+            </div>
+            <div class="col-md-6">
+                <section class="user-posts">
+                    <h2>User's Posts:</h2>
+                    <ul class="list-group">
+                        {% for post in friend_posts %}
+                            <li class="list-group-item">
+                                <div class="post-info">
+                                    {% if post.content %}
+                                        <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
+                                    {% else %}
+                                        <p>Post not available</p>
+                                    {% endif %}
+                                    <p>{{ post.caption }}</p>
+                                    <p>{{ post.created_at|date:"F d, Y H:i:s" }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 {% endblock %}

@@ -1,14 +1,58 @@
 {% extends 'Main/base.html' %}
 {% load static %}
-{% block title %}Friend Requests{% endblock %}
+{% block title %}Friends{% endblock %}
 {% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'friends.css' %}">
+</head>
+<html>
+<body style="background-color: #CFCFC4;">
+    <div class="flex-container">
+        <div class="flex-item">
+            <h2>Users:</h2>
+            <ul class='all_users'>
+                {% for user in allusers %}
+                <li>
+                    {% if user != request.user %}
+                        <p>{{ user.username }}</p>
+                        <div class="button-container">
+                            <a href="{% url 'send_friend_request' user.id %}" class="btn btn-success">Send friend request</a>
+                        </div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-<h1>Friend Requests</h1>
+        <div class="flex-item" style="width: 100%; flex: 1;">
+            <h2>Edit Friends</h2>
+            <ul>
+                {% for friend in request.user.profile.friends.all %}
+                    <li>
+                        {% if friend.profile.image %}
+                            <img src="{{ friend.profile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Profile Image">
+                        {% endif %}
+                        <p>{{friend.username}}</p>
+                        <div class="button-container">
+                            <a href="{% url 'remove_friend' friend.username %}" class="btn btn-danger">Remove Friend</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-{% for friend_request in all_friend_requests %}
-    <h1>{{ friend_request.from_user.username }}
-        <a href="{% url 'accept_friend_request' friend_request.id %}">Accept friend request</a>
-    </h1>
-{% endfor %}
+        <div class="flex-item">
+            <h2> Friend Requests </h2>
+            {% for friend_request in all_friend_requests %}
+                <h1>{{ friend_request.from_user.username }}
+                    <div class="button-container">
+                        <a href="{% url 'accept_friend_request' friend_request.id %}" class="btn btn-success">Accept friend request</a>
+                    </div>
+                </h1>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
 
 {% endblock %}

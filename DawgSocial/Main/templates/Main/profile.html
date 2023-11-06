@@ -7,36 +7,69 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
 </head>
-<body>
-  
- <!-- User Profile Header -->
-  <header class="user-header">
-    <h1>Welcome, {{ user.username }}!</h1>
-    {% if userprofile.image %}
-    <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
-    {% else %}
-    <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
-    {% endif %}
-    <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
-  </header>
+<body style="background-color: #CFCFC4;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- User Profile Header -->
+                <header class="user-header">
+                    <h1>Welcome, {{ user.username }}!<a href="{% url 'profile_update' %}" style="font-size: 25px;"><i class="fa-solid fa-pen-to-square"></i></a></h1>
+                    
+                    {% if userprofile.image %}
+                    <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+                    {% else %}
+                    <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+                    {% endif %}
+                    <h2 class="user-fullname">{{ user.first_name }} {{ user.last_name }}</h2>
+                </header>
 
-<!-- User Birthday Section -->
-<section class="user-birthday">
-    <h2>Birthday: {{ userprofile.birthday }}</h1>
-</section>
+                <!-- User Birthday Section -->
+                <section class="user-birthday">
+                    <h2>Birthday: {{ userprofile.birthday }}</h2>
+                </section>
 
-  <!-- User Bio Section -->
-  <section class="user-bio">
-    <h2>Bio:</h2>
-    {% if userprofile.bio %}
-        <p>{{ userprofile.bio }}</p>
-    {% else %}
-        <p class="no-bio">User hasn't added a bio yet.</p>
-    {% endif %}
-  </section>
-    <a href="{% url 'profile_update' %}" class="profile-update-button">
-        <button type="button">Update Profile</button>
-    </a>
+                <!-- User Bio Section -->
+                <section class="user-bio">
+                    <h2>Bio:</h2>
+                    {% if userprofile.bio %}
+                        <p>{{ userprofile.bio }}</p>
+                    {% else %}
+                        <p class="no-bio">User hasn't added a bio yet.</p>
+                    {% endif %}
+                </section>
+
+                <a href="{% url 'profile_update' %}" class="profile-update-button">
+                    <button type="button">Update Profile</button>
+                </a>
+            </div>
+            <div class="col-md-6">
+              <section class="user-posts">
+                  <h2>Your Posts:</h2>
+                  <ul class="list-group">
+                      {% for post in user_posts %}
+                        <li class="list-group-item">
+                            <div class="post-info">
+                                {% if post.content %}
+                                    <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
+                                {% else %}
+                                    <p>Post not available</p>
+                                {% endif %}
+                                <p>{{ post.caption }}</p>
+                                <p>{{ post.created_at|date:"F d, Y H:i:s" }}</p>
+                            </div>
+                            {% if post.user == request.user %}
+                            <div class="post-actions">
+                                <a href="{% url 'edit_post' post.id %}" class="btn btn-success">Edit</a>
+                                <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
+                            </div>
+                            {% endif %}
+                        </li>
+                      {% endfor %}
+                  </ul>
+              </section>
+          </div>
+        </div>
+    </div>
 </body>
 </html>
 {% endblock %}

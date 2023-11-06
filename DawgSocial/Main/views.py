@@ -49,10 +49,14 @@ def dashboard(request):
 @login_required
 def profile(request):
     userprofile = Profile.objects.get(user=request.user)
+    user_posts = Post.objects.filter(user=request.user)  # Fetch the user's posts
+
     context = {
         'userprofile': userprofile,
+        'user_posts': user_posts,  # Add user's posts to the context
     }
-    return render(request, 'Main/profile.html',context)
+    return render(request, 'Main/profile.html', context)
+
 
 @login_required
 def profile_update(request):
@@ -106,7 +110,7 @@ def edit_post(request, post_id):
             #post.caption = form.cleaned_data['caption']
             post.save()
             messages.success(request, 'Your post was successfully updated.')
-            return redirect('dashboard')
+            return redirect('profile')
     else:
         form = PostForm(instance=post)
     
@@ -121,9 +125,9 @@ def delete_post(request, post_id):
         if choice == 'yes':
             post.delete()
             messages.success(request, 'Your post was successfully deleted.')
-            return redirect('dashboard')
+            return redirect('profile')
         elif choice == 'no':
-            return redirect('dashboard')
+            return redirect('profile')
     
     return render(request, 'Main/delete_post.html', {'post':post})
 
@@ -140,7 +144,8 @@ def send_friend_request(request, user_id):
         else:
             messages.info(request, 'Friend request already sent.')
 
-    return redirect('dashboard')
+
+    return redirect('accept_page')
 
 
 @login_required
@@ -154,7 +159,17 @@ def accept_friend_request(request, requestID):
     else:
         messages.error(request, 'Friend request not accepted')
 
-    return redirect('dashboard')
+    return redirect('accept_page')
+
+@login_required
+def remove_friend(request, friend_username):
+    if request.user.is_authenticated:
+        try:
+            friend = User.objects.get(username=friend_username)
+            request.user.profile.friends.remove(friend)
+        except User.DoesNotExist:
+            pass  # Handle the case when the friend does not exist
+    return redirect('accept_page')
 
 
 @login_required
@@ -169,10 +184,30 @@ def viewing_page(request):
 
 @login_required
 def accept_page(request):
+    friends = request.user.profile.friends.all()
+    friend_requests = Friend_Request.objects.filter(from_user=request.user)
     all_friend_requests = Friend_Request.objects.filter(to_user=request.user)
-    return render(request, 'Main/accept_users.html', {'all_friend_requests': all_friend_requests})
+    allusers = User.objects.exclude(Q(id=request.user.id) | Q(id__in=friends) | Q(id__in=friend_requests.values('to_user')))
+
+    context = {
+        'allusers': allusers,
+        'friends': friends,
+        'all_friend_requests': all_friend_requests,
+    }
+
+    for friend_request in all_friend_requests:
+        if friend_request.from_user in friends:
+            friend_request.delete()
+    
+    return render(request, 'Main/accept_users.html', context)
 
 @login_required
 def user_profile(request, username):
-    user = get_object_or_404(User, username=username)
-    return render(request, 'Main/user_profile.html', {'user': user})
+    friend = get_object_or_404(User, username=username)
+    friend_posts = Post.objects.filter(user=friend)
+
+    context = {
+        'friend': friend,
+        'friend_posts': friend_posts,
+    }
+    return render(request, 'Main/user_profile.html', context)
