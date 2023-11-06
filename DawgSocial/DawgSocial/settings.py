@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -93,6 +93,8 @@ DATABASES = {
         'PORT': '',           # Leave empty to use the default PostgreSQL port (5432)
     }
 }
+
+DATABASES['default'] = dj_database_url.parse("postgres://dawgsocial_db_user:sxEcwcJeIe2Qc1fWNZ4VaDA9xQl2F9Tj@dpg-cl4isv1828mc73fk2amg-a.ohio-postgres.render.com/dawgsocial_db")
 
 
 
