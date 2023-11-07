@@ -18,7 +18,9 @@ class Post(models.Model):
     caption = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    liked_by =models.ManyToManyField(User,related_name='liked_posts')
 
+    
     def __str__(self):
         return f'{self.user.username} - {self.created_at.strftime("%Y-%m-%d %H:%M:%S")}'
     
