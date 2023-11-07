@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2pn^oz!s*+-e-g)$3q($l+lf)qkws7t%m@3^_h4%8w53sy#h$x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dawgsocial.onrender.com',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -94,7 +94,7 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.parse("postgres://dawgsocial_db_user:sxEcwcJeIe2Qc1fWNZ4VaDA9xQl2F9Tj@dpg-cl4isv1828mc73fk2amg-a.ohio-postgres.render.com/dawgsocial_db")
+DATABASES['default'] = dj_database_url.parse("postgres://db_9pfj_user:pfocQ6XGlfSEROkOZHY4iphW85dQDf6O@dpg-cl5ccfl6fh7c73ekuk4g-a.oregon-postgres.render.com/db_9pfj")
 
 
 
