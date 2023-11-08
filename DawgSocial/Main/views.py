@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm
+from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, LikeForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
 import os
 
 # Create your views here.
@@ -37,12 +39,11 @@ def register(request):
 @login_required
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
-    
-
     posts = Post.objects.all()
+    
     context = {
         'userprofile': userprofile,
-        'posts': posts
+        'posts': posts,
     }
     return render(request, 'Main/dashboard.html', context)
 
@@ -211,3 +212,32 @@ def user_profile(request, username):
         'friend_posts': friend_posts,
     }
     return render(request, 'Main/user_profile.html', context)
+
+@csrf_protect
+@login_required
+def like(request, post_id=None):
+    if request.method == 'POST':
+        form = LikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            liked = post.liked_by.filter(id=user.id).exists()
+
+            if liked:
+                post.liked_by.remove(user)
+            else:
+                post.liked_by.add(user)
+
+            like_count = post.liked_by.count()
+
+            return redirect('dashboard')  # Redirect to the dashboard after the like is processed
+
+    return redirect('dashboard')
+
+
+
+
+
+

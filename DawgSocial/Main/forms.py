@@ -37,4 +37,6 @@ class PostForm(forms.ModelForm):
             'content': forms.FileInput(attrs={'accept': 'image/*,video/*'})
         }
 
+class LikeForm(forms.Form):
+    post_id = forms.IntegerField()
 

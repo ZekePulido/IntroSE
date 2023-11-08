@@ -36,21 +36,26 @@
                     {% if post.user in request.user.profile.friends.all %}
                         <li class="list-group-item">
                             <div class="post-info">
-                                <p>Author: {{ post.user.username }}</p> <!-- Author name -->
+                                <p>Author: {{ post.user.username }}</p>
                                 {% if post.content %}
                                     <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
                                 {% else %}
                                     <p>Post not available</p>
                                 {% endif %}
                                 <p>{{ post.caption }}</p>
-                                <p>{{ post.created_at|date:"F d, Y H:i:s" }}</p>
+                                <form method="post" action="{% url 'like' post.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" class="like-button">
+                                        {% if request.user in post.liked_by.all %}<i class="fa-solid fa-heart"></i>{% else %}<i class="fa-regular fa-heart"></i>{% endif %}
+                                    </button>
+                                </form>
+                                <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
+                                <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
+                                
+                                
+                                
                             </div>
-                            {% if post.user == request.user %}
-                                <div class="post-actions">
-                                    <a href="{% url 'edit_post' post.id %}" class="btn btn-success">Edit</a>
-                                    <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
-                                </div>
-                            {% endif %}
                         </li>
                     {% endif %}
                 {% endfor %}
@@ -65,6 +70,7 @@
             {% endif %}
         </div>
     </div>
+        
 </body>
 </html>
 {% endblock %}

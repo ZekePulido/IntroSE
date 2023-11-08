@@ -20,7 +20,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     liked_by =models.ManyToManyField(User,related_name='liked_posts')
 
-    
+    def total_likes(self):
+        return self.liked_by.count()
+
+
     def __str__(self):
         return f'{self.user.username} - {self.created_at.strftime("%Y-%m-%d %H:%M:%S")}'
     
