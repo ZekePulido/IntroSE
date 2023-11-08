@@ -19,6 +19,7 @@ urlpatterns = [
     path('accept_friend_request/<int:requestID>/', views.accept_friend_request, name='accept_friend_request'),
     path('user_profile/<str:username>/', views.user_profile, name='user_profile'),
     path('remove_friend/<str:friend_username>/', views.remove_friend, name='remove_friend'),
+    path('like/<int:post_id>/', views.like, name='like'),
 ]
 
 if settings.DEBUG:
