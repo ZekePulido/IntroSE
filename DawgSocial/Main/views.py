@@ -3,7 +3,7 @@ from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, Lik
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Post, Profile, Friend_Request
+from .models import Post, Profile, Friend_Request, Comment
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
