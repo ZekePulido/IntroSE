@@ -16,7 +16,7 @@
                     <h1>Welcome, {{ user.username }}!<a href="{% url 'profile_update' %}" style="font-size: 25px;"><i class="fa-solid fa-pen-to-square"></i></a></h1>
                     
                     {% if userprofile.image %}
-                    <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+                    <img src="{{ userprofile.image.url }}" style="max-width: 150px; max-height: 150px;">
                     {% else %}
                     <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
                     {% endif %}
@@ -63,6 +63,15 @@
                                 <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
                             </div>
                             {% endif %}
+                            <!-- Comments Section -->
+                            <div class="comments-section">
+                                <h4>Comments:</h4>
+                                <ul>
+                                    {% for comment in post.comments.all %}
+                                        <li>{{ comment.user.username }}: {{ comment.content }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </li>
                       {% endfor %}
                   </ul>

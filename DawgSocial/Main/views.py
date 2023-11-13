@@ -49,7 +49,7 @@ def dashboard(request):
 @login_required
 def profile(request):
     userprofile = Profile.objects.get(user=request.user)
-    user_posts = Post.objects.filter(user=request.user)  # Fetch the user's posts
+    user_posts = Post.objects.filter(user=request.user).prefetch_related('comments') # Fetch the user's posts
 
     context = {
         'userprofile': userprofile,
