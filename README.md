@@ -56,7 +56,7 @@ To run this application you need to run this command inside of the DawgSocial fo
 py manage.py runserver
 ```
 ## Deployment:
-It is currently deployed on render here: https://dawgsocial.onrender.com/profile
+It is currently deployed on render here: https://dawgsocial.onrender.com
 
 ## Authors
 *Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196 <br>
