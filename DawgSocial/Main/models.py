@@ -18,7 +18,8 @@ class Post(models.Model):
     caption = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    liked_by =models.ManyToManyField(User,related_name='liked_posts')
+    liked_by = models.ManyToManyField(User,related_name='liked_posts')
+    disliked_by= models.ManyToManyField(User,related_name='disliked_posts')
 
     def total_likes(self):
         return self.liked_by.count()
