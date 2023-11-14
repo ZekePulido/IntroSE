@@ -40,3 +40,7 @@ class PostForm(forms.ModelForm):
 class LikeForm(forms.Form):
     post_id = forms.IntegerField()
 
+
+class DisLikeForm(forms.Form):
+    post_id = forms.IntegerField()
+
