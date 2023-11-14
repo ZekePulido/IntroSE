@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, LikeForm
+from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, LikeForm, DisLikeForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -247,6 +247,29 @@ def post_comment(request, post_id):
     else:
         messages.error(request, 'You can only comment on friends\' posts.')
         return redirect('dashboard')
+
+@csrf_protect
+@login_required
+def dislike(request, post_id=None):
+    if request.method == 'POST':
+        form = DisLikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            disliked = post.disliked_by.filter(id=user.id).exists()
+
+            if disliked:
+                post.disliked_by.remove(user)
+            else:
+                post.disliked_by.add(user)
+
+            dislike_count = post.disliked_by.count()
+
+            return redirect('dashboard')  # Redirect to the dashboard after the like is processed
+
+    return redirect('dashboard')
 
 @login_required
 def delete_comment(request, comment_id):
