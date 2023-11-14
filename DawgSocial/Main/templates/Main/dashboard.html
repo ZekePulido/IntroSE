@@ -58,7 +58,12 @@
                                 <h4>Comments:</h4>
                                 <ul>
                                     {% for comment in post.comments.all %}
-                                        <li>{{ comment.user.username }}: {{ comment.content }}</li>
+                                        <li>
+                                            {{ comment.user.username }}: {{ comment.content }}
+                                            {% if comment.user == request.user %}
+                                                <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+                                            {% endif %}
+                                        </li>
                                     {% endfor %}
                                 </ul>
                                 <form method="post" action="{% url 'post_comment' post.id %}">

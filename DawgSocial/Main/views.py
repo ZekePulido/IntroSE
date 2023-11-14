@@ -243,4 +243,12 @@ def post_comment(request, post_id):
     else:
         messages.error(request, 'You can only comment on friends\' posts.')
         return redirect('dashboard')
-    
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id, user=request.user)
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, 'Your comment was successfully deleted.')
+        return redirect('dashboard')  # Redirect to the dashboard or relevant page
+    return render(request, 'Main/delete_comment.html', {'comment': comment})

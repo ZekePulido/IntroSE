@@ -1,0 +1,11 @@
+{% extends 'Main/base.html' %}
+{% block content %}
+<body style="background-color: #CFCFC4;">
+    <h2>Are you sure you want to delete this comment?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, delete">
+    </form>
+    <a href="{% url 'dashboard' %}">No, go back</a>
+</body>
+{% endblock %}
