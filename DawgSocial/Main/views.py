@@ -3,7 +3,7 @@ from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, Lik
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Post, Profile, Friend_Request
+from .models import Post, Profile, Friend_Request, Comment
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
@@ -35,11 +35,10 @@ def register(request):
 
     return render(request, 'registration/register.html', {"form": form})
 
-
 @login_required
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
-    posts = Post.objects.all()
+    posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     
     context = {
         'userprofile': userprofile,
@@ -50,7 +49,7 @@ def dashboard(request):
 @login_required
 def profile(request):
     userprofile = Profile.objects.get(user=request.user)
-    user_posts = Post.objects.filter(user=request.user)  # Fetch the user's posts
+    user_posts = Post.objects.filter(user=request.user).prefetch_related('comments') # Fetch the user's posts
 
     context = {
         'userprofile': userprofile,
@@ -58,13 +57,11 @@ def profile(request):
     }
     return render(request, 'Main/profile.html', context)
 
-
 @login_required
 def profile_update(request):
     user = request.user
     profile_user = request.user.profile
     
-
     if request.method == 'POST':
         user_form = UpdateUserForm(request.POST, instance=user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile_user)
@@ -117,7 +114,6 @@ def edit_post(request, post_id):
     
     return render(request, 'Main/edit_post.html', {'form':form})
 
-
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id, user=request.user)
@@ -148,7 +144,6 @@ def send_friend_request(request, user_id):
 
     return redirect('accept_page')
 
-
 @login_required
 def accept_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
@@ -171,7 +166,6 @@ def remove_friend(request, friend_username):
         except User.DoesNotExist:
             pass  # Handle the case when the friend does not exist
     return redirect('accept_page')
-
 
 @login_required
 def viewing_page(request):
@@ -205,7 +199,11 @@ def accept_page(request):
 @login_required
 def user_profile(request, username):
     friend = get_object_or_404(User, username=username)
-    friend_posts = Post.objects.filter(user=friend)
+    friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
+
+    # Add a can_comment flag to each post
+    for post in friend_posts:
+        post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
 
     context = {
         'friend': friend,
@@ -236,6 +234,20 @@ def like(request, post_id=None):
 
     return redirect('dashboard')
 
+@login_required
+def post_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    # Check if the user is a friend of the post's author
+    if request.user.profile.friends.filter(id=post.user.id).exists():
+        if request.method == 'POST':
+            comment_content = request.POST.get('comment_content')
+            Comment.objects.create(user=request.user, post=post, content=comment_content)
+            messages.success(request, 'Your comment was successfully added.')
+            return redirect('dashboard')
+    else:
+        messages.error(request, 'You can only comment on friends\' posts.')
+        return redirect('dashboard')
+
 @csrf_protect
 @login_required
 def dislike(request, post_id=None):
@@ -259,8 +271,11 @@ def dislike(request, post_id=None):
 
     return redirect('dashboard')
 
-
-
-
-
-
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id, user=request.user)
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, 'Your comment was successfully deleted.')
+        return redirect('dashboard')  # Redirect to the dashboard or relevant page
+    return render(request, 'Main/delete_comment.html', {'comment': comment})
