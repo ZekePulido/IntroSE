@@ -199,7 +199,11 @@ def accept_page(request):
 @login_required
 def user_profile(request, username):
     friend = get_object_or_404(User, username=username)
-    friend_posts = Post.objects.filter(user=friend)
+    friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
+
+    # Add a can_comment flag to each post
+    for post in friend_posts:
+        post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
 
     context = {
         'friend': friend,
