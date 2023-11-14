@@ -6,47 +6,71 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
-
+    <style>
+        .flex-container {
+            display: flex;
+            align-items: stretch; /* This makes all items equal in height */
+        }
+    </style>
 </head>
-<body>
-    <h1> Welcome to the dashboard! </h1>
+<body style="background-color: #CFCFC4;">
     <div class="flex-container">
-        <div class="flex-item">
-            <h2>Friend List:</h2>
-            <p>Where the list of friends will be displayed.</p>
+        <div class="flex-item" id="friends-container">
+            <h2>Friends:</h2>
+            <ul>
+                {% for friend in request.user.profile.friends.all %}
+                    <li>
+                        {% if friend.profile.image %}
+                            <img src="{{ friend.profile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Profile Image">
+                        {% endif %}
+                        <a href="{% url 'user_profile' friend.username %}" style="text-decoration: none; color: inherit;">{{ friend.username }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
 
-        <div class= "flex-item">
-            <h2>Posts</h2>
-
-            {% for post in posts %}
-                <div class="post">
-                    {% if post.content %}
-                    <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
-                    {% else %}
-                    <p>Post not available</p>
+        <div class="flex-item" id="posts-container">
+            <h2>Posts <a href="{% url 'create_post' %}" class="btn btn-success">Create Post</a></h2>
+            <ul class="list-group">
+                {% for post in posts %}
+                    {% if post.user in request.user.profile.friends.all %}
+                        <li class="list-group-item">
+                            <div class="post-info">
+                                <p>Author: {{ post.user.username }}</p>
+                                {% if post.content %}
+                                    <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
+                                {% else %}
+                                    <p>Post not available</p>
+                                {% endif %}
+                                <p>{{ post.caption }}</p>
+                                <form method="post" action="{% url 'like' post.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" class="like-button">
+                                        {% if request.user in post.liked_by.all %}<i class="fa-solid fa-heart"></i>{% else %}<i class="fa-regular fa-heart"></i>{% endif %}
+                                    </button>
+                                </form>
+                                <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
+                                <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
+                                
+                                
+                                
+                            </div>
+                        </li>
                     {% endif %}
-                    <p>{{ post.caption }}</p>
-
-                    <a href="{% url 'edit_post' post.id %}">Edit</a>
-                    <a href="{% url 'delete_post' post.id %}">Delete</a>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </ul>
         </div>
-        
-        
-        <div class="flex-item">
-            <h1>Welcome {{user.username}}!</h1>
+
+        <div class="flex-item" style="text-align: right;">
             {% if userprofile.image %}
-            <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+            <img src="{{ userprofile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" class="profile-image">
             {% else %}
-            <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+            <img src="{% static 'default-avatar.png' %}" class="profile-image" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Default Avatar">
             {% endif %}
-            <br>
-            <a href="{% url 'create_post' %}"><button>Create Post</button></a> 
         </div>
-
     </div>
+        
 </body>
 </html>
 {% endblock %}

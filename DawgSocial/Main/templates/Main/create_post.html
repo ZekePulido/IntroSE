@@ -4,7 +4,7 @@
 <head>
     <link rel = "stylesheet" type="text/css" href="{%static 'create_post.css' %}">
 </head>
-
+<body style="background-color: #CFCFC4;">
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <label for="{{ form.content.id_for_label }}">Upload Post:</label>
@@ -16,5 +16,5 @@
     
     <button type="submit">POST</button>
 </form>
-
+</body>
 {% endblock %}
