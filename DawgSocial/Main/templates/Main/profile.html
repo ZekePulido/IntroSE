@@ -16,7 +16,7 @@
                     <h1>Welcome, {{ user.username }}!<a href="{% url 'profile_update' %}" style="font-size: 25px;"><i class="fa-solid fa-pen-to-square"></i></a></h1>
                     
                     {% if userprofile.image %}
-                    <img src="{{userprofile.image.url}}" style="max-width: 150px; max-height: 150px;">
+                    <img src="{{ userprofile.image.url }}" style="max-width: 150px; max-height: 150px;">
                     {% else %}
                     <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
                     {% endif %}
@@ -43,31 +43,48 @@
                 </a>
             </div>
             <div class="col-md-6">
-              <section class="user-posts">
-                  <h2>Your Posts:</h2>
-                  <ul class="list-group">
-                      {% for post in user_posts %}
-                        <li class="list-group-item">
-                            <div class="post-info">
-                                {% if post.content %}
-                                    <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
-                                {% else %}
-                                    <p>Post not available</p>
+                <section class="user-posts">
+                    <h2>Posts:</h2>
+                    <ul class="list-group">
+                        {% for post in user_posts %}
+                            <li class="list-group-item">
+                                <div class="post-info">
+                                    {% if post.content %}
+                                        <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
+                                    {% else %}
+                                        <p>Post not available</p>
+                                    {% endif %}
+                                    <p>{{ post.caption }}</p>
+                                    <p>{{ post.created_at|date:"F d, Y H:i:s" }}</p>
+                                </div>
+                                {% if post.user == request.user %}
+                                    <div class="post-actions">
+                                        <a href="{% url 'edit_post' post.id %}" class="btn btn-success">Edit</a>
+                                        <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
+                                    </div>
                                 {% endif %}
-                                <p>{{ post.caption }}</p>
-                                <p>{{ post.created_at|date:"F d, Y H:i:s" }}</p>
-                            </div>
-                            {% if post.user == request.user %}
-                            <div class="post-actions">
-                                <a href="{% url 'edit_post' post.id %}" class="btn btn-success">Edit</a>
-                                <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
-                            </div>
-                            {% endif %}
-                        </li>
-                      {% endfor %}
-                  </ul>
-              </section>
-          </div>
+                                <!-- Comments Section -->
+                                <div class="comments-section">
+                                    <h4>Comments:</h4>
+                                    <ul>
+                                        {% for comment in post.comments.all %}
+                                            <li>{{ comment.user.username }}: {{ comment.content }}</li>
+                                        {% empty %}
+                                            <li>No comments yet.</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <!-- Add Comment Form -->
+                                    <form method="post" action="{% url 'post_comment' post.id %}">
+                                        {% csrf_token %}
+                                        <textarea name="comment_content" placeholder="Add a comment..."></textarea>
+                                        <button type="submit">Comment</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            </div>
         </div>
     </div>
 </body>
