@@ -62,15 +62,32 @@
                                 <p id="dislike-count-{{ post.id }}">{{ post.disliked_by.count }} DisLikes</p>
                                 <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
 
-                                
-                                
-                                
+                            </div>
+                            <!-- Comments Section -->
+                            <div class="comments-section">
+                                <h4>Comments:</h4>
+                                <ul>
+                                    {% for comment in post.comments.all %}
+                                        <li>
+                                            {{ comment.user.username }}: {{ comment.content }}
+                                            {% if comment.user == request.user %}
+                                                <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <form method="post" action="{% url 'post_comment' post.id %}">
+                                    {% csrf_token %}
+                                    <textarea name="comment_content" placeholder="Add a comment..."></textarea>
+                                    <button type="submit">Comment</button>
+                                </form>
+
                             </div>
                         </li>
                     {% endif %}
                 {% endfor %}
             </ul>
-        </div>
+        </div>        
 
         <div class="flex-item" style="text-align: right;">
             {% if userprofile.image %}
