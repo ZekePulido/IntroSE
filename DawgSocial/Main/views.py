@@ -222,17 +222,23 @@ def like(request, post_id=None):
             post = Post.objects.get(id=post_id)
 
             liked = post.liked_by.filter(id=user.id).exists()
+            disliked = post.disliked_by.filter(id=user.id).exists()
 
             if liked:
                 post.liked_by.remove(user)
             else:
                 post.liked_by.add(user)
 
+                # If the user has already disliked the post, remove the dislike
+                if disliked:
+                    post.disliked_by.remove(user)
+
             like_count = post.liked_by.count()
 
             return redirect('dashboard')  # Redirect to the dashboard after the like is processed
 
     return redirect('dashboard')
+
 
 @login_required
 def post_comment(request, post_id):
@@ -259,15 +265,20 @@ def dislike(request, post_id=None):
             post = Post.objects.get(id=post_id)
 
             disliked = post.disliked_by.filter(id=user.id).exists()
+            liked = post.liked_by.filter(id=user.id).exists()
 
             if disliked:
                 post.disliked_by.remove(user)
             else:
                 post.disliked_by.add(user)
 
+                # If the user has already liked the post, remove the like
+                if liked:
+                    post.liked_by.remove(user)
+
             dislike_count = post.disliked_by.count()
 
-            return redirect('dashboard')  # Redirect to the dashboard after the like is processed
+            return redirect('dashboard')  # Redirect to the dashboard after the dislike is processed
 
     return redirect('dashboard')
 
