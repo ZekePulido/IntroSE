@@ -21,6 +21,8 @@ urlpatterns = [
     path('remove_friend/<str:friend_username>/', views.remove_friend, name='remove_friend'),
     path('like/<int:post_id>/', views.like, name='like'),
     path('dislike/<int:post_id>/', views.dislike, name='dislike'),
+    path('reject_friend_request/<int:requestID>/', views.reject_friend_request, name='reject_friend_request'),
+    path('withdraw_friend_request/<int:requestID>/', views.withdraw_friend_request, name='withdraw_friend_request'),
 ]
 
 if settings.DEBUG:
