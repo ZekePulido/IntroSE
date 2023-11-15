@@ -20,10 +20,11 @@ urlpatterns = [
     path('user_profile/<str:username>/', views.user_profile, name='user_profile'),
     path('remove_friend/<str:friend_username>/', views.remove_friend, name='remove_friend'),
     path('like/<int:post_id>/', views.like, name='like'),
-
     path('post_comment/<int:post_id>/', views.post_comment, name='post_comment'),
     path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
     path('dislike/<int:post_id>/', views.dislike, name='dislike'),
+    path('reject_friend_request/<int:requestID>/', views.reject_friend_request, name='reject_friend_request'),
+    path('withdraw_friend_request/<int:requestID>/', views.withdraw_friend_request, name='withdraw_friend_request'),
 
 ]
 

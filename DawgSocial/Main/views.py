@@ -164,7 +164,30 @@ def remove_friend(request, friend_username):
             friend = User.objects.get(username=friend_username)
             request.user.profile.friends.remove(friend)
         except User.DoesNotExist:
-            pass  # Handle the case when the friend does not exist
+            pass 
+    return redirect('accept_page')
+
+@login_required
+def reject_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.delete()
+        messages.success(request, 'Friend request rejected')
+    else:
+        messages.error(request, 'Friend request not rejected')
+
+    return redirect('accept_page')
+
+
+@login_required
+def withdraw_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.from_user == request.user:
+        friend_request.delete()
+        messages.success(request, 'Friend request withdrawn')
+    else:
+        messages.error(request, 'Friend request not withdrawn')
+
     return redirect('accept_page')
 
 @login_required
@@ -180,20 +203,21 @@ def viewing_page(request):
 @login_required
 def accept_page(request):
     friends = request.user.profile.friends.all()
-    friend_requests = Friend_Request.objects.filter(from_user=request.user)
-    all_friend_requests = Friend_Request.objects.filter(to_user=request.user)
-    allusers = User.objects.exclude(Q(id=request.user.id) | Q(id__in=friends) | Q(id__in=friend_requests.values('to_user')))
+    friend_requests_received = Friend_Request.objects.filter(to_user=request.user)
+    friend_requests_sent = Friend_Request.objects.filter(from_user=request.user)
+    allusers = User.objects.exclude(Q(id=request.user.id) | Q(id__in=friends) | Q(id__in=friend_requests_received.values('from_user')))
 
     context = {
         'allusers': allusers,
         'friends': friends,
-        'all_friend_requests': all_friend_requests,
+        'friend_requests_received': friend_requests_received,
+        'friend_requests_sent': friend_requests_sent,
     }
 
-    for friend_request in all_friend_requests:
+    for friend_request in friend_requests_received:
         if friend_request.from_user in friends:
             friend_request.delete()
-    
+
     return render(request, 'Main/accept_users.html', context)
 
 @login_required
