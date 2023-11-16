@@ -40,5 +40,10 @@ class PostForm(forms.ModelForm):
 class ShareForm(forms.ModelForm):
     caption = forms.CharField(label= '', widget=forms.Textarea(attrs={'placeholder': 'Say something...'}))
 
+class LikeForm(forms.Form):
+    post_id = forms.IntegerField()
 
+
+class DisLikeForm(forms.Form):
+    post_id = forms.IntegerField()
 
