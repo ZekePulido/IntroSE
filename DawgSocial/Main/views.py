@@ -97,7 +97,7 @@ def create_post(request):
             post.user = request.user # modify the post objec before saving it 
             post.save()
             messages.success(request, 'You have successfully created a post')
-            return redirect('dashboard')
+            return redirect('profile')
     else:
         form = PostForm()
     
@@ -240,15 +240,20 @@ def like(request, post_id=None):
 
     return redirect('dashboard')
 
+@csrf_protect
 @login_required
 def share_post(request, post_id):
     original_post = get_object_or_404(Post, id=post_id)
-    print(f"Received friend_post_id: {post_id}")
+    #Allow repost once
+    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+        messages.error(request, "You have already shared this post.")
+        print("You have already shared this post.")
+        return redirect('profile')
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
             form = ShareForm(request.POST)
             if form.is_valid():
-                shared_caption = form.cleaned_data['caption']
+                shared_caption = form.cleaned_data.get('caption', '')
 
                 new_post = Post(
                     content = original_post.content,
@@ -259,32 +264,12 @@ def share_post(request, post_id):
                 )
                 new_post.save()
 
-                return redirect('dashboard')
+                return redirect('profile')
 
         else:
             form = ShareForm(initial={'post_id':post_id})
 
     return render(request, 'Main/share_post.html', {'form': form, 'post_id': post_id})
-
-
-
-"""def share_post(request, post_id=None):
-    original_post = get_object_or_404(Post, id=post_id, user__profile__friends=request.user)
-    if request.method == 'POST':
-        form = ShareForm(request.POST)
-        if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.user = request.user
-            new_post.shared_user = original_post.user  # Set the shared user
-            new_post.content = original_post.content  # Copy the content from the original post
-            new_post.save()
-            messages.success(request, 'You have successfully shared the post.')
-            return redirect('dashboard')
-    else:
-        form = ShareForm(initial={'post_id': post_id})
-
-    return render(request, 'Main/share_post.html', {'form': form, 'post_id': post_id})
-"""
 
 @login_required
 def post_comment(request, post_id):

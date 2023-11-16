@@ -6,6 +6,8 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
         .flex-container {
             display: flex;
@@ -36,7 +38,9 @@
                     {% if post.user in request.user.profile.friends.all %}
                         <li class="list-group-item">
                             <div class="post-info">
-                                
+                                {% if post.shared_user %}
+                                <p>Reposted from: {{ post.shared_user.username }}</p>
+                                {% endif %}
                                 <p>Author: {{ post.user.username }}</p>
                                 {% if post.content %}
                                     <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
@@ -59,15 +63,14 @@
                                     </button>
                                 </form>
 
+                                
                                 <form method="post" action="{% url 'share_post' post.id %}" style="display: inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="post_id" value="{{ post.id }}">
                                     <button type="submit" class="share-button">
                                         <i class="fa-solid fa-share"></i>
                                     </button>
-                                
                                 </form>
-                                
 
                                 <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
                                 <p id="dislike-count-{{ post.id }}">{{ post.disliked_by.count }} DisLikes</p>
@@ -107,6 +110,8 @@
             <img src="{% static 'default-avatar.png' %}" class="profile-image" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Default Avatar">
             {% endif %}
         </div>
+
+
     </div>
         
 </body>
