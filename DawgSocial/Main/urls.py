@@ -25,6 +25,9 @@ urlpatterns = [
     path('dislike/<int:post_id>/', views.dislike, name='dislike'),
     path('reject_friend_request/<int:requestID>/', views.reject_friend_request, name='reject_friend_request'),
     path('withdraw_friend_request/<int:requestID>/', views.withdraw_friend_request, name='withdraw_friend_request'),
+    path('favorite/<int:post_id>/', views.favorite, name='favorite'),
+    path('favorited_posts', views.favorited_posts, name='favorited_posts'),
+    
 
 ]
 

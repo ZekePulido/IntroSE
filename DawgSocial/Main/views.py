@@ -39,10 +39,13 @@ def register(request):
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
-    
+
+    favorited_posts = Post.objects.filter(favorited_by=request.user)
+
     context = {
         'userprofile': userprofile,
         'posts': posts,
+        'favorited_posts': favorited_posts,
     }
     return render(request, 'Main/dashboard.html', context)
 
@@ -307,6 +310,26 @@ def dislike(request, post_id=None):
     return redirect('dashboard')
 
 @login_required
+def favorite(request, post_id=None):
+    if request.method == 'POST':
+        form = LikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            favorited = post.favorited_by.filter(id=user.id).exists()
+
+            if favorited:
+                post.favorited_by.remove(user)
+            else:
+                post.favorited_by.add(user)
+
+            return redirect('dashboard')  # Redirect to the dashboard after the favorite is processed
+
+    return redirect('dashboard')
+
+@login_required
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
     if request.method == 'POST':
@@ -314,3 +337,12 @@ def delete_comment(request, comment_id):
         messages.success(request, 'Your comment was successfully deleted.')
         return redirect('dashboard')  # Redirect to the dashboard or relevant page
     return render(request, 'Main/delete_comment.html', {'comment': comment})
+
+@login_required
+def favorited_posts(request):
+    favorited_posts = Post.objects.filter(favorited_by=request.user)
+
+    context = {
+        'favorited_posts': favorited_posts,
+    }
+    return render(request, 'Main/favorited_posts.html', context)
