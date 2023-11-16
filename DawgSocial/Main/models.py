@@ -13,15 +13,15 @@ class Profile(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shared_user  = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
+    shared_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
     content = models.ImageField(null=True, blank=True, upload_to='media/')
     caption = models.TextField(null=True, blank=True)
-    shared_caption = models.TextField(blank=True, null=True)
+    shared_caption = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    shared_at = models.DateTimeField(auto_now=True)
-    liked_by = models.ManyToManyField(User,related_name='liked_posts')
-    disliked_by= models.ManyToManyField(User,related_name='disliked_posts')
+    shared_at = models.DateTimeField(auto_now_add=True)  # Use auto_now_add for the initial shared time
+    liked_by = models.ManyToManyField(User, related_name='liked_posts')
+    disliked_by = models.ManyToManyField(User, related_name='disliked_posts')
 
     class Meta:
         ordering = ['-created_at', '-shared_at']
@@ -29,9 +29,9 @@ class Post(models.Model):
     def total_likes(self):
         return self.liked_by.count()
 
-
     def __str__(self):
         return f'{self.user.username} - {self.created_at.strftime("%Y-%m-%d %H:%M:%S")}'
+
     
 class Friend_Request(models.Model):
     from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)

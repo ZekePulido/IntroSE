@@ -36,6 +36,7 @@
                     {% if post.user in request.user.profile.friends.all %}
                         <li class="list-group-item">
                             <div class="post-info">
+                                
                                 <p>Author: {{ post.user.username }}</p>
                                 {% if post.content %}
                                     <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
@@ -57,7 +58,17 @@
                                         {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
                                     </button>
                                 </form>
+
+                                <form method="post" action="{% url 'share_post' post.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" class="share-button">
+                                        <i class="fa-solid fa-share"></i>
+                                    </button>
                                 
+                                </form>
+                                
+
                                 <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
                                 <p id="dislike-count-{{ post.id }}">{{ post.disliked_by.count }} DisLikes</p>
                                 <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
@@ -71,7 +82,7 @@
                                         <li>
                                             {{ comment.user.username }}: {{ comment.content }}
                                             {% if comment.user == request.user %}
-                                                <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+                                                <a href="{% url 'delete_comment' comment.id %}"><i class="fa-solid fa-trash"></i></a>
                                             {% endif %}
                                         </li>
                                     {% endfor %}

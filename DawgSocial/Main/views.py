@@ -40,11 +40,13 @@ def register(request):
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
-
+    reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
+    all_posts = posts | reposts
+    all_posts = all_posts.distinct().order_by('-created_at')
     
     context = {
         'userprofile': userprofile,
-        'posts': posts,
+        'posts': all_posts,
     }
     return render(request, 'Main/dashboard.html', context)
 
@@ -101,27 +103,6 @@ def create_post(request):
     
     return render(request, 'Main/create_post.html', {'form': form})
 
-@login_required
-def share_post(request, post_id):
-    original_post = get_object_or_404(Post, id = post_id, user=request.user)
-    if request.method == 'POST':
-        #original_post = Post.objects.get(pk=pk)
-        form = ShareForm(request.POST)
-        if form.is_valid():
-            new_post = Post(
-                shared_caption=request.POST.get('caption'),
-                caption=original_post.body,
-                user=original_post.user,
-                created_at=original_post.created_at,
-                shared_user=request.user
-            )
-            new_post.save()
-
-            #for img in original_post.image.all():
-             #   new_post.image.add(img)
-            #new_post.save()
-    return redirect('Main/share_post.html')
-
     
 @login_required
 def edit_post(request, post_id):
@@ -170,7 +151,7 @@ def send_friend_request(request, user_id):
 
 
 @login_required
-def accept_friend_request(request, requestID):
+def  accept_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
     if friend_request.to_user == request.user:
         friend_request.to_user.profile.friends.add(friend_request.from_user)
@@ -259,6 +240,51 @@ def like(request, post_id=None):
 
     return redirect('dashboard')
 
+@login_required
+def share_post(request, post_id):
+    original_post = get_object_or_404(Post, id=post_id)
+    print(f"Received friend_post_id: {post_id}")
+    if request.user.profile.friends.filter(id=original_post.user.id).exists():
+        if request.method == 'POST':
+            form = ShareForm(request.POST)
+            if form.is_valid():
+                shared_caption = form.cleaned_data['caption']
+
+                new_post = Post(
+                    content = original_post.content,
+                    shared_caption=shared_caption,
+                    caption=original_post.caption,
+                    user=request.user,
+                    shared_user=original_post.user
+                )
+                new_post.save()
+
+                return redirect('dashboard')
+
+        else:
+            form = ShareForm(initial={'post_id':post_id})
+
+    return render(request, 'Main/share_post.html', {'form': form, 'post_id': post_id})
+
+
+
+"""def share_post(request, post_id=None):
+    original_post = get_object_or_404(Post, id=post_id, user__profile__friends=request.user)
+    if request.method == 'POST':
+        form = ShareForm(request.POST)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.user = request.user
+            new_post.shared_user = original_post.user  # Set the shared user
+            new_post.content = original_post.content  # Copy the content from the original post
+            new_post.save()
+            messages.success(request, 'You have successfully shared the post.')
+            return redirect('dashboard')
+    else:
+        form = ShareForm(initial={'post_id': post_id})
+
+    return render(request, 'Main/share_post.html', {'form': form, 'post_id': post_id})
+"""
 
 @login_required
 def post_comment(request, post_id):

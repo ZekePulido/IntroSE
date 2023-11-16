@@ -5,23 +5,15 @@
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    
-    <!-- Render the select field to choose a friend's post to share -->
-    <label for="friend_post">Choose a Friend's Post to Share:</label>
-    <select class="form-control" id="friend_post" name="friend_post">
-        <option value="" disabled selected>Select a Friend's Post</option>
-        {% for post in friend_posts %}
-            <option value="{{ post.id }}">{{ post.caption }}</option>
-        {% endfor %}
-    </select>
-    
-    <!-- Display the selected friend's post as an image, if it exists -->
-    {% if selected_friend_post %}
-    <img src="{{ selected_friend_post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Friend's Post">
-    {% endif %}
+    <!-- Display the current uploaded file as an image, if it exists -->
+    <div>
+        {% if form.instance.content %}
+        <img src="{{ form.instance.content.url }}" style="max-width: 100px; max-height: 100px;"alt="Current media file">
+        {% endif %}
+    </div>
     
     <!-- Render caption textarea -->
-    <label for="{{ form.caption.id_for_label }}">Add a Caption (optional):</label>
+    <label for="{{ form.caption.id_for_label }}">Caption:</label>
     {{ form.caption }}
     
     <button type="submit">Share</button>
@@ -29,3 +21,4 @@
 
 </body>
 {% endblock %}
+
