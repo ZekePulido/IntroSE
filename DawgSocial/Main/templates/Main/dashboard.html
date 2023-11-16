@@ -57,6 +57,13 @@
                                         {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
                                     </button>
                                 </form>
+                                <form method="post" action="{% url 'favorite' post.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" class="favorite-button">
+                                        {% if request.user in post.favorited_by.all %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}
+                                    </button>
+                                </form>
                                 
                                 <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
                                 <p id="dislike-count-{{ post.id }}">{{ post.disliked_by.count }} DisLikes</p>
