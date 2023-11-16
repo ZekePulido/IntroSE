@@ -21,7 +21,6 @@ class Post(models.Model):
     disliked_by= models.ManyToManyField(User,related_name='disliked_posts')
     favorited_by = models.ManyToManyField(User, related_name='favorited_posts', blank=True)
 
-
     def total_likes(self):
         return self.liked_by.count()
 
