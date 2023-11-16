@@ -13,12 +13,18 @@ class Profile(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shared_user  = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
     content = models.ImageField(null=True, blank=True, upload_to='media/')
     caption = models.TextField(null=True, blank=True)
+    shared_caption = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    shared_at = models.DateTimeField(auto_now=True)
     liked_by = models.ManyToManyField(User,related_name='liked_posts')
     disliked_by= models.ManyToManyField(User,related_name='disliked_posts')
+
+    class Meta:
+        ordering = ['-created_at', '-shared_at']
 
     def total_likes(self):
         return self.liked_by.count()
@@ -39,3 +45,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.user.username} on {self.post}'
+

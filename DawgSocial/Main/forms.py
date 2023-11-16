@@ -28,7 +28,7 @@ class UpdateUserForm(forms.ModelForm):
         fields = ['username', 'email', 'first_name', 'last_name']
 
 class PostForm(forms.ModelForm):
-    caption =forms.CharField(required=False)
+    caption =forms.CharField(required=False, widget=forms.Textarea(attrs={'placeholder': 'Say something...'}))
 
     class Meta:
         model = Post
@@ -37,10 +37,8 @@ class PostForm(forms.ModelForm):
             'content': forms.FileInput(attrs={'accept': 'image/*,video/*'})
         }
 
-class LikeForm(forms.Form):
-    post_id = forms.IntegerField()
+class ShareForm(forms.ModelForm):
+    caption = forms.CharField(label= '', widget=forms.Textarea(attrs={'placeholder': 'Say something...'}))
 
 
-class DisLikeForm(forms.Form):
-    post_id = forms.IntegerField()
 

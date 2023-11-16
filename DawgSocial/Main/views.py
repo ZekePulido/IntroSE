@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, LikeForm, DisLikeForm
+from .forms import RegisterForm, ProfileUpdateForm, UpdateUserForm,PostForm, ShareForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Post, Profile, Friend_Request, Comment
+from .models import Post, Profile, Friend_Request,Comment
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
@@ -35,10 +35,12 @@ def register(request):
 
     return render(request, 'registration/register.html', {"form": form})
 
+
 @login_required
 def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
+
     
     context = {
         'userprofile': userprofile,
@@ -50,6 +52,7 @@ def dashboard(request):
 def profile(request):
     userprofile = Profile.objects.get(user=request.user)
     user_posts = Post.objects.filter(user=request.user).prefetch_related('comments') # Fetch the user's posts
+ # Fetch the user's posts
 
     context = {
         'userprofile': userprofile,
@@ -57,11 +60,13 @@ def profile(request):
     }
     return render(request, 'Main/profile.html', context)
 
+
 @login_required
 def profile_update(request):
     user = request.user
     profile_user = request.user.profile
     
+
     if request.method == 'POST':
         user_form = UpdateUserForm(request.POST, instance=user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile_user)
@@ -82,8 +87,7 @@ def profile_update(request):
 
 @login_required
 def create_post(request):
-    print(request.user.is_authenticated)
-    print(request.user.username)
+
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -98,14 +102,33 @@ def create_post(request):
     return render(request, 'Main/create_post.html', {'form': form})
 
 @login_required
+def share_post(request, post_id):
+    original_post = get_object_or_404(Post, id = post_id, user=request.user)
+    if request.method == 'POST':
+        #original_post = Post.objects.get(pk=pk)
+        form = ShareForm(request.POST)
+        if form.is_valid():
+            new_post = Post(
+                shared_caption=request.POST.get('caption'),
+                caption=original_post.body,
+                user=original_post.user,
+                created_at=original_post.created_at,
+                shared_user=request.user
+            )
+            new_post.save()
+
+            #for img in original_post.image.all():
+             #   new_post.image.add(img)
+            #new_post.save()
+    return redirect('Main/share_post.html')
+
+    
+@login_required
 def edit_post(request, post_id):
-    print(f"Post ID: {post_id}")
     post = get_object_or_404(Post, id = post_id, user=request.user)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            #post.content = form.cleaned_data['content']
-            #post.caption = form.cleaned_data['caption']
             post.save()
             messages.success(request, 'Your post was successfully updated.')
             return redirect('profile')
@@ -113,6 +136,7 @@ def edit_post(request, post_id):
         form = PostForm(instance=post)
     
     return render(request, 'Main/edit_post.html', {'form':form})
+
 
 @login_required
 def delete_post(request, post_id):
@@ -144,6 +168,7 @@ def send_friend_request(request, user_id):
 
     return redirect('accept_page')
 
+
 @login_required
 def accept_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
@@ -166,6 +191,7 @@ def remove_friend(request, friend_username):
         except User.DoesNotExist:
             pass  # Handle the case when the friend does not exist
     return redirect('accept_page')
+
 
 @login_required
 def viewing_page(request):
@@ -200,7 +226,6 @@ def accept_page(request):
 def user_profile(request, username):
     friend = get_object_or_404(User, username=username)
     friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
-
     # Add a can_comment flag to each post
     for post in friend_posts:
         post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
@@ -233,6 +258,7 @@ def like(request, post_id=None):
             return redirect('dashboard')  # Redirect to the dashboard after the like is processed
 
     return redirect('dashboard')
+
 
 @login_required
 def post_comment(request, post_id):
@@ -279,3 +305,6 @@ def delete_comment(request, comment_id):
         messages.success(request, 'Your comment was successfully deleted.')
         return redirect('dashboard')  # Redirect to the dashboard or relevant page
     return render(request, 'Main/delete_comment.html', {'comment': comment})
+
+
+
