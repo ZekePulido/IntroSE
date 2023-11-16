@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxLengthValidator
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -14,7 +15,11 @@ class Profile(models.Model):
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.ImageField(null=True, blank=True, upload_to='media/')
-    caption = models.TextField(null=True, blank=True)
+    caption = models.TextField(
+        null=True,
+        blank=True,
+        validators=[MaxLengthValidator(limit_value=255, message="Caption must be at most 255 characters.")]
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     liked_by = models.ManyToManyField(User,related_name='liked_posts')
