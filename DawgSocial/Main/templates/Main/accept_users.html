@@ -41,15 +41,39 @@
             </ul>
         </div>
 
+                <!-- Friend Requests Section -->
         <div class="flex-item">
             <h2> Friend Requests </h2>
-            {% for friend_request in all_friend_requests %}
-                <h1>{{ friend_request.from_user.username }}
-                    <div class="button-container">
-                        <a href="{% url 'accept_friend_request' friend_request.id %}" class="btn btn-success">Accept friend request</a>
-                    </div>
-                </h1>
-            {% endfor %}
+            {% if friend_requests_received %}
+                {% for friend_request in friend_requests_received %}
+                    {% if friend_request.id is not None %}
+                    <h1>{{ friend_request.from_user.username }}
+                        <div class="button-container">
+                            <a href="{% url 'accept_friend_request' friend_request.id %}" class="btn btn-success">Accept friend request</a>
+                            <a href="{% url 'reject_friend_request' friend_request.id %}" class="btn btn-danger">Reject friend request</a>
+                        </div>
+                    </h1>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No friend requests.</p>
+            {% endif %}
+        </div>
+
+        <!-- Sent Friend Requests Section -->
+        <div class="flex-item">
+            <h2> Sent Friend Requests </h2>
+            {% if friend_requests_sent %}
+                {% for sent_request in friend_requests_sent %}
+                    <h1>{{ sent_request.to_user.username }}
+                        <div class="button-container">
+                            <a href="{% url 'withdraw_friend_request' sent_request.id %}" class="btn btn-warning">Withdraw friend request</a>
+                        </div>
+                    </h1>
+                {% endfor %}
+            {% else %}
+                <p>No sent friend requests.</p>
+            {% endif %}
         </div>
     </div>
 </body>

@@ -33,6 +33,7 @@
                     <div class="dropdown-menu" aria-labelledby="profileDropdown">
                         <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        <a class="dropdown-item" href="{% url 'favorited_posts' %}">Favorites</a>
                     </div>
                 </li>
                 {% else %}
