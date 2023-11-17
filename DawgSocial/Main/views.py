@@ -47,7 +47,7 @@ def dashboard(request):
     context = {
         'userprofile': userprofile,
         'posts': all_posts,
-
+    }
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
     context = {
