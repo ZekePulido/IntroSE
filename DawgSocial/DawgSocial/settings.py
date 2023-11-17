@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2pn^oz!s*+-e-g)$3q($l+lf)qkws7t%m@3^_h4%8w53sy#h$x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dawgsocial.onrender.com',""]
 
 
 # Application definition
@@ -83,19 +83,13 @@ WSGI_APPLICATION = 'DawgSocial.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'edb_admin',
-        'USER': 'edb_admin',
-        'PASSWORD': 'Password123!',
-        'HOST': 'p-495s2rq9vm.pg.biganimal.io',  # Set this to your PostgreSQL server's hostname or IP address
-        'PORT': '',           # Leave empty to use the default PostgreSQL port (5432)
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
-
-DATABASES['default'] = dj_database_url.parse("postgres://db_9pfj_user:pfocQ6XGlfSEROkOZHY4iphW85dQDf6O@dpg-cl5ccfl6fh7c73ekuk4g-a.oregon-postgres.render.com/db_9pfj")
-
 
 
 # Password validation
