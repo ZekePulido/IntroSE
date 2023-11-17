@@ -2,9 +2,9 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    width: 100%;
     justify-content: space-between;
-    align-items: center;
+    align-items: start; /* Align at the top */
+    padding: 20px;
     margin: 0;
 }
 body {
@@ -200,12 +200,14 @@ body {
     margin-top: 10px;
 }
 
-.flex-item{
+.flex-item {
     flex: 1;
-    padding: 0px;
-    margin: 0;
+    margin: 10px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 
 .profile-image {
     max-width: 50px;
@@ -214,37 +216,33 @@ body {
     margin-left: auto;
 }
 
-.edit-button {
-    background-color: green;
+.edit-button, .delete-button {
     padding: 5px 10px;
     text-decoration: none;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.edit-button {
+    background-color: green;
 }
 
 .delete-button {
     background-color: red;
-    padding: 5px 10px;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .btn-light-pink {
-    background-color: #FFB6C1; 
+    background-color: #FFB6C1;
     border-color: #FFB6C1;
-    color: white; 
-}
-
-
-.btn-light-pink:hover {
-    background-color: #FF69B4; 
-    border-color: #FF69B4;
     color: white;
 }
 
+.btn-light-pink:hover {
+    background-color: #FF69B4;
+    border-color: #FF69B4;
+    color: white;
+}
 
 
 /* Additional Styles */
@@ -295,11 +293,7 @@ body {
     display: flex;
     align-items: center;
     font-size: 1.2em;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 }
 
 #friends-container h2:before {
@@ -308,9 +302,6 @@ body {
     padding-right: 10px;
 }
 
-<<<<<<< Updated upstream
-=======
-}
 
 #friends-container h2:before {
     content: '\f500'; /* FontAwesome user-friends icon unicode */
@@ -318,9 +309,6 @@ body {
     padding-right: 10px;
 }
 
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 #friends-container ul {
     list-style: none;
     padding-left: 0;
@@ -339,13 +327,6 @@ body {
     padding-right: 10px;
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 /* Styling for the posts section */
 #posts-container {
     flex: 1; /* Take up the remaining space */

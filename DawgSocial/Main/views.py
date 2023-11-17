@@ -334,7 +334,6 @@ def share_post(request, post_id):
                     shared_user=original_post.user
                 )
                 new_post.save()
-
                 return redirect('dashboard')
 
         else:

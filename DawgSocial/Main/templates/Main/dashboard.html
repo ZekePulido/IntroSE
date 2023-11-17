@@ -7,19 +7,22 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <style>
 
         .flex-container {
             display: flex;
             align-items: stretch; /* This makes all items equal in height */
+            padding-top: 10px;
+            padding: 20px;
         }
-
         
         body {
             background-color: #F4F4F4;
             font-family: Arial, sans-serif;
         }
+
         .search-container {
             max-width: 1200px; /* or the width of your flex-container */
             margin: 20px auto;
@@ -62,19 +65,13 @@
             justify-content: center; /* Center children horizontally */
         }
 
-        .flex-container {
-            display: flex;
-            align-items: start; /* Align at the top */
-            padding-top: 10px;
-        }
-
         .flex-item {
             margin: 10px;
-            padding: 10px;
+            padding: 20px;
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            flex: 2;
+            flex: 1;
         }
 
         #friends-container ul, #posts-container ul {
@@ -91,6 +88,10 @@
         }
         #friends-container{
             flex: 2;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E0E0E0;
+
         }
 
         #posts-container .list-group-item {
@@ -104,6 +105,7 @@
             padding-bottom: 10px;
             border-bottom: 1px solid #E0E0E0;
         }
+
         .profile-image {
             max-width: 50px;
             max-height: 50px;
@@ -128,7 +130,6 @@
             padding: 10px;
             margin-top: 10px;
         }
-    
         .comments-section form button {
             margin-top: 10px;
             background-color: #007bff;
@@ -198,7 +199,7 @@
                 {% for friend in request.user.profile.friends.all %}
                     <li>
                         {% if friend.profile.image %}
-                            <img src="{{ friend.profile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Profile Image">
+                            <img src="{{ friend.profile.image.url }}" class="profile-image" alt="Profile Image">
                         {% endif %}
                         <a href="{% url 'user_profile' friend.username %}" style="text-decoration: none; color: inherit;">{{ friend.username }}</a>
                     </li>
@@ -256,7 +257,7 @@
                                     </button>
                                 </form>
 
-                                <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p
+                                <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p>
                                 <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
 
                             </div>
