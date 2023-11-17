@@ -86,16 +86,10 @@ WSGI_APPLICATION = 'DawgSocial.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DawgSocial',      # Replace with your actual database name
-        'USER': 'Zekep',
-        'PASSWORD': 'Group4Password123!',  # Replace with your actual database password
-        'HOST': 'Zekep.mysql.pythonanywhere-services.com',
-        'PORT': '',  # Leave it empty for the default MySQL port (3306)
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
-
-DATABASES['default']=dj_database_url.parse("redis://red-clbcksent67s73adbdt0:6379")
 
 
 # Password validation
