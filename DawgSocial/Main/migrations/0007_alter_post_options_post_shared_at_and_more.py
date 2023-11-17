@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('Main', '0006_merge_0005_comment_0005_post_disliked_by_0005_repost'),
+        ('Main', '0005_post_disliked_by'),
     ]
 
     operations = [
@@ -32,7 +32,5 @@ class Migration(migrations.Migration):
             name='shared_user',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to=settings.AUTH_USER_MODEL),
         ),
-        migrations.DeleteModel(
-            name='Repost',
-        ),
+
     ]
