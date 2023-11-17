@@ -49,6 +49,9 @@
                         {% for post in user_posts %}
                             <li class="list-group-item">
                                 <div class="post-info">
+                                    {% if post.shared_user %}
+                                    <p>Reposted from: {{ post.shared_user.username }}</p>
+                                    {% endif %}
                                     {% if post.content %}
                                         <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
                                     {% else %}
@@ -63,6 +66,7 @@
                                         <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
                                     </div>
                                 {% endif %}
+                           
                                 <!-- Comments Section -->
                                 <div class="comments-section">
                                     <h4>Comments:</h4>

@@ -6,6 +6,8 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
         .flex-container {
             display: flex;
@@ -36,6 +38,9 @@
                     {% if post.user in request.user.profile.friends.all %}
                         <li class="list-group-item">
                             <div class="post-info">
+                                {% if post.shared_user %}
+                                <p>Reposted from: {{ post.shared_user.username }}</p>
+                                {% endif %}
                                 <p>Author: {{ post.user.username }}</p>
                                 {% if post.content %}
                                     <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
@@ -57,6 +62,8 @@
                                         {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
                                     </button>
                                 </form>
+
+
                                 <form method="post" action="{% url 'favorite' post.id %}" style="display: inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="post_id" value="{{ post.id }}">
@@ -64,7 +71,16 @@
                                         {% if request.user in post.favorited_by.all %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}
                                     </button>
                                 </form>
+
                                 
+                                <form method="post" action="{% url 'share_post' post.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" class="share-button">
+                                        <i class="fa-solid fa-share"></i>
+                                    </button>
+                                </form>
+
                                 <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
                                 <p id="dislike-count-{{ post.id }}">{{ post.disliked_by.count }} DisLikes</p>
                                 <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
@@ -78,7 +94,7 @@
                                         <li>
                                             {{ comment.user.username }}: {{ comment.content }}
                                             {% if comment.user == request.user %}
-                                                <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+                                                <a href="{% url 'delete_comment' comment.id %}"><i class="fa-solid fa-trash"></i></a>
                                             {% endif %}
                                         </li>
                                     {% endfor %}
@@ -95,6 +111,14 @@
                 {% endfor %}
             </ul>
         </div>        
+
+        <div class="flex-item" style="text-align: right;">
+            {% if userprofile.image %}
+            <img src="{{ userprofile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" class="profile-image">
+            {% else %}
+            <img src="{% static 'default-avatar.png' %}" class="profile-image" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Default Avatar">
+            {% endif %}
+        </div>
     </div>
         
 </body>

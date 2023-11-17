@@ -14,6 +14,7 @@ urlpatterns = [
     path('create_post', views.create_post, name='create_post'),
     path('edit_post/<int:post_id>/', views.edit_post, name='edit_post'),
     path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
+    path('share_post/<int:post_id>/', views.share_post, name='share_post'),
     path('accept_page', views.accept_page, name = 'accept_page'),
     path('send_friend_request/<int:user_id>/', views.send_friend_request, name='send_friend_request'),
     path('accept_friend_request/<int:requestID>/', views.accept_friend_request, name='accept_friend_request'),
