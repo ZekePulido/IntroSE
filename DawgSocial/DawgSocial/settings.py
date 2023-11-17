@@ -83,19 +83,17 @@ WSGI_APPLICATION = 'DawgSocial.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'edb_admin',
-        'USER': 'edb_admin',
-        'PASSWORD': 'Password123!',
-        'HOST': 'p-495s2rq9vm.pg.biganimal.io',  # Set this to your PostgreSQL server's hostname or IP address
-        'PORT': '',           # Leave empty to use the default PostgreSQL port (5432)
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DawgSocial',      # Replace with your actual database name
+        'USER': 'Zekep',
+        'PASSWORD': 'Group4Password123!',  # Replace with your actual database password
+        'HOST': 'Zekep.mysql.pythonanywhere-services.com',
+        'PORT': '',  # Leave it empty for the default MySQL port (3306)
     }
 }
-
-DATABASES['default'] = dj_database_url.parse("postgres://db_9pfj_user:pfocQ6XGlfSEROkOZHY4iphW85dQDf6O@dpg-cl5ccfl6fh7c73ekuk4g-a.oregon-postgres.render.com/db_9pfj")
-
 
 
 # Password validation
