@@ -43,6 +43,10 @@ def dashboard(request):
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
     all_posts = (posts | reposts).distinct().order_by('-created_at')
     
+    context = {
+        'userprofile': userprofile,
+        'posts': all_posts,
+    }
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
     context = {
