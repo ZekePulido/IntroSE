@@ -41,18 +41,13 @@ def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
-    all_posts = posts | reposts
-    all_posts = all_posts.distinct().order_by('-created_at')
+    all_posts = (posts | reposts).distinct().order_by('-created_at')
     
-    context = {
-        'userprofile': userprofile,
-        'posts': all_posts,
-
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
     context = {
         'userprofile': userprofile,
-        'posts': posts,
+        'posts': all_posts,
         'favorited_posts': favorited_posts,
     }
     return render(request, 'Main/dashboard.html', context)
