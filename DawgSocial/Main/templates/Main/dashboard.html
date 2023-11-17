@@ -7,13 +7,85 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <style>
         .flex-container {
             display: flex;
             align-items: stretch; /* This makes all items equal in height */
         }
+        
+        body {
+            background-color: #F4F4F4;
+            font-family: Arial, sans-serif;
+        }
+
+        .flex-container {
+            display: flex;
+            align-items: start; /* Align at the top */
+            padding: 20px;
+        }
+
+        .flex-item {
+            margin: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        #friends-container ul, #posts-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #friends-container li, #posts-container li {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        #posts-container .list-group-item {
+            border: none;
+        }
+
+        .profile-image {
+            max-width: 50px;
+            max-height: 50px;
+            border-radius: 50%;
+        }
+
+        .post-info img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .like-button, .dislike-button, .share-button {
+            border: none;
+            background: none;
+        }
+
+        .comments-section form textarea {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #E0E0E0;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .comments-section form button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
     </style>
+    
 </head>
 <body style="background-color: #CFCFC4;">
     <div class="flex-container">
@@ -23,7 +95,7 @@
                 {% for friend in request.user.profile.friends.all %}
                     <li>
                         {% if friend.profile.image %}
-                            <img src="{{ friend.profile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Profile Image">
+                            <img src="{{ friend.profile.image.url }}" class="profile-image" alt="Profile Image">
                         {% endif %}
                         <a href="{% url 'user_profile' friend.username %}" style="text-decoration: none; color: inherit;">{{ friend.username }}</a>
                     </li>

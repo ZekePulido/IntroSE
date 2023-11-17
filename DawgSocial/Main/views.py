@@ -300,7 +300,7 @@ def share_post(request, post_id):
                 )
                 new_post.save()
 
-                return redirect('profile')
+                return redirect('Main/share_post.html')
 
         else:
             form = ShareForm(initial={'post_id':post_id})
