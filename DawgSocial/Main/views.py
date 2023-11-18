@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponseRedirect
 import os
 
 # Create your views here.
@@ -315,10 +316,10 @@ def post_comment(request, post_id):
             comment_content = request.POST.get('comment_content')
             Comment.objects.create(user=request.user, post=post, content=comment_content)
             messages.success(request, 'Your comment was successfully added.')
-            return redirect('dashboard')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'dashboard'))
     else:
         messages.error(request, 'You can only comment on friends\' posts.')
-        return redirect('dashboard')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 @csrf_protect
 @login_required
