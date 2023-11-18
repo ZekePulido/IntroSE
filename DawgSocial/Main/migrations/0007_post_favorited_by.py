@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('Main', '0006_merge_0005_comment_0005_post_disliked_by'),
+        ('Main', '0005_post_disliked_by'),
     ]
 
     operations = [
