@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponseRedirect
 import os
 
 # Create your views here.
@@ -41,8 +42,7 @@ def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
-    all_posts = posts | reposts
-    all_posts = all_posts.distinct().order_by('-created_at')
+    all_posts = (posts | reposts).distinct().order_by('-created_at')
     
     context = {
         'userprofile': userprofile,
@@ -52,7 +52,7 @@ def dashboard(request):
 
     context = {
         'userprofile': userprofile,
-        'posts': posts,
+        'posts': all_posts,
         'favorited_posts': favorited_posts,
     }
     return render(request, 'Main/dashboard.html', context)
@@ -382,10 +382,10 @@ def post_comment(request, post_id):
             comment_content = request.POST.get('comment_content')
             Comment.objects.create(user=request.user, post=post, content=comment_content)
             messages.success(request, 'Your comment was successfully added.')
-            return redirect('dashboard')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'dashboard'))
     else:
         messages.error(request, 'You can only comment on friends\' posts.')
-        return redirect('dashboard')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 @csrf_protect
 @login_required
