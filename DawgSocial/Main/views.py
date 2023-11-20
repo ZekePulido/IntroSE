@@ -54,6 +54,13 @@ def dashboard(request):
         'userprofile': userprofile,
         'posts': posts,
         'favorited_posts': favorited_posts,
+    }
+    favorited_posts = Post.objects.filter(favorited_by=request.user)
+
+    context = {
+        'userprofile': userprofile,
+        'posts': posts,
+        'favorited_posts': favorited_posts,
 
     }
     return render(request, 'Main/dashboard.html', context)
@@ -178,7 +185,30 @@ def remove_friend(request, friend_username):
             friend = User.objects.get(username=friend_username)
             request.user.profile.friends.remove(friend)
         except User.DoesNotExist:
-            pass  # Handle the case when the friend does not exist
+            pass 
+    return redirect('accept_page')
+
+@login_required
+def reject_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.delete()
+        messages.success(request, 'Friend request rejected')
+    else:
+        messages.error(request, 'Friend request not rejected')
+
+    return redirect('accept_page')
+
+
+@login_required
+def withdraw_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.from_user == request.user:
+        friend_request.delete()
+        messages.success(request, 'Friend request withdrawn')
+    else:
+        messages.error(request, 'Friend request not withdrawn')
+
     return redirect('accept_page')
 
 
@@ -195,20 +225,21 @@ def viewing_page(request):
 @login_required
 def accept_page(request):
     friends = request.user.profile.friends.all()
-    friend_requests = Friend_Request.objects.filter(from_user=request.user)
-    all_friend_requests = Friend_Request.objects.filter(to_user=request.user)
-    allusers = User.objects.exclude(Q(id=request.user.id) | Q(id__in=friends) | Q(id__in=friend_requests.values('to_user')))
+    friend_requests_received = Friend_Request.objects.filter(to_user=request.user)
+    friend_requests_sent = Friend_Request.objects.filter(from_user=request.user)
+    allusers = User.objects.exclude(Q(id=request.user.id) | Q(id__in=friends) | Q(id__in=friend_requests_received.values('from_user')))
 
     context = {
         'allusers': allusers,
         'friends': friends,
-        'all_friend_requests': all_friend_requests,
+        'friend_requests_received': friend_requests_received,
+        'friend_requests_sent': friend_requests_sent,
     }
 
-    for friend_request in all_friend_requests:
+    for friend_request in friend_requests_received:
         if friend_request.from_user in friends:
             friend_request.delete()
-    
+
     return render(request, 'Main/accept_users.html', context)
 
 @login_required
@@ -236,11 +267,16 @@ def like(request, post_id=None):
             post = Post.objects.get(id=post_id)
 
             liked = post.liked_by.filter(id=user.id).exists()
+            disliked = post.disliked_by.filter(id=user.id).exists()
 
             if liked:
                 post.liked_by.remove(user)
             else:
                 post.liked_by.add(user)
+
+                # If the user has already disliked the post, remove the dislike
+                if disliked:
+                    post.disliked_by.remove(user)
 
             like_count = post.liked_by.count()
 
@@ -272,7 +308,7 @@ def share_post(request, post_id):
                 )
                 new_post.save()
 
-                return redirect('profile')
+                return redirect('Main/share_post.html')
 
         else:
             form = ShareForm(initial={'post_id':post_id})
@@ -304,15 +340,40 @@ def dislike(request, post_id=None):
             post = Post.objects.get(id=post_id)
 
             disliked = post.disliked_by.filter(id=user.id).exists()
+            liked = post.liked_by.filter(id=user.id).exists()
 
             if disliked:
                 post.disliked_by.remove(user)
             else:
                 post.disliked_by.add(user)
 
+                # If the user has already liked the post, remove the like
+                if liked:
+                    post.liked_by.remove(user)
+
             dislike_count = post.disliked_by.count()
 
-            return redirect('dashboard')  # Redirect to the dashboard after the like is processed
+            return redirect('dashboard')  # Redirect to the dashboard after the dislike is processed
+
+    return redirect('dashboard')
+
+@login_required
+def favorite(request, post_id=None):
+    if request.method == 'POST':
+        form = LikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            favorited = post.favorited_by.filter(id=user.id).exists()
+
+            if favorited:
+                post.favorited_by.remove(user)
+            else:
+                post.favorited_by.add(user)
+
+            return redirect('dashboard')  # Redirect to the dashboard after the favorite is processed
 
     return redirect('dashboard')
 
@@ -325,5 +386,11 @@ def delete_comment(request, comment_id):
         return redirect('dashboard')  # Redirect to the dashboard or relevant page
     return render(request, 'Main/delete_comment.html', {'comment': comment})
 
+@login_required
+def favorited_posts(request):
+    favorited_posts = Post.objects.filter(favorited_by=request.user)
 
-
+    context = {
+        'favorited_posts': favorited_posts,
+    }
+    return render(request, 'Main/favorited_posts.html', context)

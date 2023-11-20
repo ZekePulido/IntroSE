@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxLengthValidator
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -25,6 +26,17 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-created_at', '-shared_at']
+        
+    caption = models.TextField(
+        null=True,
+        blank=True,
+        validators=[MaxLengthValidator(limit_value=255, message="Caption must be at most 255 characters.")]
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    liked_by = models.ManyToManyField(User,related_name='liked_posts')
+    disliked_by= models.ManyToManyField(User,related_name='disliked_posts')
+    favorited_by = models.ManyToManyField(User, related_name='favorited_posts', blank=True)
 
     def total_likes(self):
         return self.liked_by.count()

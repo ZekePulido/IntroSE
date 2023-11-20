@@ -7,6 +7,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <style>
 
@@ -14,7 +15,6 @@
             display: flex;
             align-items: stretch; /* This makes all items equal in height */
         }
-
         
         body {
             background-color: #F4F4F4;
@@ -62,19 +62,21 @@
             justify-content: center; /* Center children horizontally */
         }
 
+
         .flex-container {
             display: flex;
             align-items: start; /* Align at the top */
-            padding-top: 10px;
+            padding: 20px;
         }
 
         .flex-item {
             margin: 10px;
-            padding: 10px;
+            padding: 20px;
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            flex: 2;
+            flex: 1;
+
         }
 
         #friends-container ul, #posts-container ul {
@@ -83,7 +85,6 @@
         }
 
         #friends-container li, #posts-container li {
-
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid #E0E0E0;
@@ -91,11 +92,16 @@
         }
         #friends-container{
             flex: 2;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E0E0E0;
+
         }
 
         #posts-container .list-group-item {
             border: none;
         }
+
         #posts-container{
             flex: 4;
             max-height: 600px; 
@@ -104,6 +110,7 @@
             padding-bottom: 10px;
             border-bottom: 1px solid #E0E0E0;
         }
+
         .profile-image {
             max-width: 50px;
             max-height: 50px;
@@ -128,7 +135,6 @@
             padding: 10px;
             margin-top: 10px;
         }
-    
         .comments-section form button {
             margin-top: 10px;
             background-color: #007bff;
@@ -180,6 +186,7 @@
 
     </script>
 
+
 </head>
 <body>
     <div class="outer-container">
@@ -198,7 +205,7 @@
                 {% for friend in request.user.profile.friends.all %}
                     <li>
                         {% if friend.profile.image %}
-                            <img src="{{ friend.profile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Profile Image">
+                            <img src="{{ friend.profile.image.url }}" class="profile-image" alt="Profile Image">
                         {% endif %}
                         <a href="{% url 'user_profile' friend.username %}" style="text-decoration: none; color: inherit;">{{ friend.username }}</a>
                     </li>
@@ -235,6 +242,15 @@
                                     <input type="hidden" name="post_id" value="{{ post.id }}">
                                     <button type="submit" class="dislike-button">
                                         {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
+                                    </button>
+                                </form>
+
+
+                                <form method="post" action="{% url 'favorite' post.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" class="favorite-button">
+                                        {% if request.user in post.favorited_by.all %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}
                                     </button>
                                 </form>
 
@@ -285,8 +301,6 @@
             <img src="{% static 'default-avatar.png' %}" class="profile-image" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Default Avatar">
             {% endif %}
         </div>
-
-
     </div>
         
 </body>
