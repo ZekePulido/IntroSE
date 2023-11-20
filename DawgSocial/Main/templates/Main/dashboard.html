@@ -81,8 +81,7 @@
                                     </button>
                                 </form>
 
-                                <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
-                                <p id="dislike-count-{{ post.id }}">{{ post.disliked_by.count }} DisLikes</p>
+                                <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p
                                 <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
 
                             </div>
