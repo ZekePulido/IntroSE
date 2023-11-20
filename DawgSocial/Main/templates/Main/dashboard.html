@@ -111,14 +111,6 @@
                 {% endfor %}
             </ul>
         </div>        
-
-        <div class="flex-item" style="text-align: right;">
-            {% if userprofile.image %}
-            <img src="{{ userprofile.image.url }}" style="max-width: 50px; max-height: 50px; border-radius: 50%;" class="profile-image">
-            {% else %}
-            <img src="{% static 'default-avatar.png' %}" class="profile-image" style="max-width: 50px; max-height: 50px; border-radius: 50%;" alt="Default Avatar">
-            {% endif %}
-        </div>
     </div>
         
 </body>
