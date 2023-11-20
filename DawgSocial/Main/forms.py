@@ -50,4 +50,3 @@ class LikeForm(forms.Form):
 
 class DisLikeForm(forms.Form):
     post_id = forms.IntegerField()
-

@@ -309,7 +309,6 @@ body {
     padding-right: 10px;
 }
 
-
 #friends-container ul {
     list-style: none;
     padding-left: 0;
@@ -327,7 +326,6 @@ body {
     font-family: 'Font Awesome 5 Free';
     padding-right: 10px;
 }
-
 
 /* Styling for the posts section */
 #posts-container {
@@ -353,50 +351,3 @@ body {
 
 /* Ensure that the FontAwesome icons are loaded */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
-
-/* Additional Styles */
-
-#friends-container ul, #posts-container ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-#friends-container li, #posts-container li {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #E0E0E0;
-}
-
-#posts-container .list-group-item {
-    border: none;
-}
-
-.post-info img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
-.like-button, .dislike-button, .share-button {
-    border: none;
-    background: none;
-}
-
-.comments-section form textarea {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #E0E0E0;
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.comments-section form button {
-    margin-top: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-}
-

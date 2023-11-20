@@ -49,14 +49,39 @@
                                         <p>Post not available</p>
                                     {% endif %}
                                     <p>{{ post.caption }}</p>
-                                    <form method="post" action="{% url 'like' post.id %}" style="display: inline;">
+                                    <form method="post" action="{% url 'like_u' friend.username post.id  %}" style="display: inline;">
                                         {% csrf_token %}
                                         <input type="hidden" name="post_id" value="{{ post.id }}">
                                         <button type="submit" class="like-button">
                                             {% if request.user in post.liked_by.all %}<i class="fa-solid fa-heart"></i>{% else %}<i class="fa-regular fa-heart"></i>{% endif %}
                                         </button>
                                     </form>
-                                    <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes</p>
+                                    <form method="post" action="{% url 'dislike_u' friend.username post.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                                        <button type="submit" class="dislike-button">
+                                            {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
+                                        </button>
+                                    </form>
+    
+                                    <form method="post" action="{% url 'favorite_u' friend.username post.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                                        <button type="submit" class="favorite-button">
+                                            {% if request.user in post.favorited_by.all %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}
+                                        </button>
+                                    </form>
+    
+                                    
+                                    <form method="post" action="{% url 'share_post_u' friend.username post.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                                        <button type="submit" class="share-button">
+                                            <i class="fa-solid fa-share"></i>
+                                        </button>
+                                    </form>
+    
+                                    <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p>
                                     <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
                                 </div>
                                 <!-- Comments Section -->

@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponseRedirect
 import os
 
 # Create your views here.
@@ -41,8 +42,7 @@ def dashboard(request):
     userprofile = Profile.objects.get(user=request.user)
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
-    all_posts = posts | reposts
-    all_posts = all_posts.distinct().order_by('-created_at')
+    all_posts = (posts | reposts).distinct().order_by('-created_at')
     
     context = {
         'userprofile': userprofile,
@@ -52,8 +52,9 @@ def dashboard(request):
 
     context = {
         'userprofile': userprofile,
-        'posts': posts,
+        'posts': all_posts,
         'favorited_posts': favorited_posts,
+
     }
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
@@ -243,9 +244,10 @@ def accept_page(request):
     return render(request, 'Main/accept_users.html', context)
 
 @login_required
-def user_profile(request, username):
+def user_profile(request, username, post_id=None):
     friend = get_object_or_404(User, username=username)
     friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
+    
     # Add a can_comment flag to each post
     for post in friend_posts:
         post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
@@ -286,13 +288,77 @@ def like(request, post_id=None):
 
 @csrf_protect
 @login_required
+def like_u(request, username, post_id=None):
+    friend = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        form = LikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            liked = post.liked_by.filter(id=user.id).exists()
+            disliked = post.disliked_by.filter(id=user.id).exists()
+
+            if liked:
+                post.liked_by.remove(user)
+            else:
+                post.liked_by.add(user)
+
+                # If the user has already disliked the post, remove the dislike
+                if disliked:
+                    post.disliked_by.remove(user)
+
+            like_count = post.liked_by.count()
+
+            # Include the post_id parameter in the redirect
+            return redirect('user_profile_u', username=friend.username, post_id=post_id)
+
+    # Include the post_id parameter in the redirect
+    return redirect('user_profile_u', username=friend.username, post_id=post_id)
+
+
+
+@csrf_protect
+@login_required
 def share_post(request, post_id):
     original_post = get_object_or_404(Post, id=post_id)
     #Allow repost once
     if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
         messages.error(request, "You have already shared this post.")
         print("You have already shared this post.")
-        return redirect('profile')
+        return redirect('dashboard')
+    if request.user.profile.friends.filter(id=original_post.user.id).exists():
+        if request.method == 'POST':
+            form = ShareForm(request.POST)
+            if form.is_valid():
+                shared_caption = form.cleaned_data.get('caption', '')
+
+                new_post = Post(
+                    content = original_post.content,
+                    shared_caption=shared_caption,
+                    caption=original_post.caption,
+                    user=request.user,
+                    shared_user=original_post.user
+                )
+                new_post.save()
+                return redirect('dashboard')
+
+        else:
+            form = ShareForm(initial={'post_id':post_id})
+
+    return render(request, 'Main/share_post.html', {'form': form, 'post_id': post_id})
+
+@csrf_protect
+@login_required
+def share_post_u(request,username, post_id):
+    friend = get_object_or_404(User, username=username)
+    original_post = get_object_or_404(Post, id=post_id)
+    #Allow repost once
+    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+        messages.error(request, "You have already shared this post.")
+        print("You have already shared this post.")
+        return redirect('user_profile_u', username=friend.username, post_id=post_id)
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
             form = ShareForm(request.POST)
@@ -308,7 +374,7 @@ def share_post(request, post_id):
                 )
                 new_post.save()
 
-                return redirect('Main/share_post.html')
+                return redirect('user_profile_u', username=friend.username, post_id=post_id)
 
         else:
             form = ShareForm(initial={'post_id':post_id})
@@ -324,10 +390,10 @@ def post_comment(request, post_id):
             comment_content = request.POST.get('comment_content')
             Comment.objects.create(user=request.user, post=post, content=comment_content)
             messages.success(request, 'Your comment was successfully added.')
-            return redirect('dashboard')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'dashboard'))
     else:
         messages.error(request, 'You can only comment on friends\' posts.')
-        return redirect('dashboard')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 @csrf_protect
 @login_required
@@ -357,6 +423,35 @@ def dislike(request, post_id=None):
 
     return redirect('dashboard')
 
+@csrf_protect
+@login_required
+def dislike_u(request,username, post_id=None):
+    friend = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        form = DisLikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            disliked = post.disliked_by.filter(id=user.id).exists()
+            liked = post.liked_by.filter(id=user.id).exists()
+
+            if disliked:
+                post.disliked_by.remove(user)
+            else:
+                post.disliked_by.add(user)
+
+                # If the user has already liked the post, remove the like
+                if liked:
+                    post.liked_by.remove(user)
+
+            dislike_count = post.disliked_by.count()
+
+            return redirect('user_profile_u',username=friend.username, post_id=post_id) 
+
+    return redirect('user_profile_u',username=friend.username, post_id=post_id)
+
 @login_required
 def favorite(request, post_id=None):
     if request.method == 'POST':
@@ -376,6 +471,27 @@ def favorite(request, post_id=None):
             return redirect('dashboard')  # Redirect to the dashboard after the favorite is processed
 
     return redirect('dashboard')
+
+@login_required
+def favorite_u(request, username, post_id=None):
+    friend = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        form = LikeForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            post_id = form.cleaned_data['post_id']
+            post = Post.objects.get(id=post_id)
+
+            favorited = post.favorited_by.filter(id=user.id).exists()
+
+            if favorited:
+                post.favorited_by.remove(user)
+            else:
+                post.favorited_by.add(user)
+
+            return redirect('user_profile_u',username=friend.username, post_id=post_id) 
+
+    return redirect('user_profile_u',username=friend.username, post_id=post_id) 
 
 @login_required
 def delete_comment(request, comment_id):
