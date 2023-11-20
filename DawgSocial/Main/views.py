@@ -54,6 +54,7 @@ def dashboard(request):
         'userprofile': userprofile,
         'posts': all_posts,
         'favorited_posts': favorited_posts,
+
     }
     return render(request, 'Main/dashboard.html', context)
 

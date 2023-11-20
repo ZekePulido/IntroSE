@@ -9,13 +9,188 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <style>
+
         .flex-container {
             display: flex;
             align-items: stretch; /* This makes all items equal in height */
         }
+
+        
+        body {
+            background-color: #F4F4F4;
+            font-family: Arial, sans-serif;
+        }
+        .search-container {
+            max-width: 1200px; /* or the width of your flex-container */
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center; /* Center the search bar */
+            display: flex;
+            justify-content: center; /* This will center the child elements (your input and button) horizontally */
+            padding: 10px 0; 
+        }
+
+        #search-bar {
+            padding: 10px;
+            margin-right: 10px; /* Add some space between the input and the button */
+            width: 100%; /* You can adjust the width as needed */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+    
+
+        #search-bar, .search-button {
+            margin: 0 5px; /* Optional: add some space between the input and button */
+        }
+
+/* If you want to center the search-container itself within another container, ensure that container is also a flex container or uses text-align: center */
+        .outer-container {
+            display: flex;
+            justify-content: center; /* Center children horizontally */
+        }
+
+        .flex-container {
+            display: flex;
+            align-items: start; /* Align at the top */
+            padding-top: 10px;
+        }
+
+        .flex-item {
+            margin: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 2;
+        }
+
+        #friends-container ul, #posts-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #friends-container li, #posts-container li {
+
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E0E0E0;
+    
+        }
+        #friends-container{
+            flex: 2;
+        }
+
+        #posts-container .list-group-item {
+            border: none;
+        }
+        #posts-container{
+            flex: 4;
+            max-height: 600px; 
+            overflow-y: auto; 
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        .profile-image {
+            max-width: 50px;
+            max-height: 50px;
+            border-radius: 50%;
+        }
+
+        .post-info img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .like-button, .dislike-button, .share-button, .favorite-button {
+            border: none;
+            background: none;
+        }
+        .comments-section form textarea {
+            width: 100%;
+            height: 50px;
+            border-radius: 5px;
+            border: 1px solid #E0E0E0;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    
+        .comments-section form button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }   
+
     </style>
+    <script>
+
+    document.addEventListener('input', function (event) {
+        if (event.target.tagName.toLowerCase() !== 'textarea') return;
+        autoExpand(event.target);
+    }, false);
+
+    function autoExpand(field) {
+        // Reset field height
+        field.style.height = 'inherit';
+
+        // Get the computed styles for the element
+        var computed = window.getComputedStyle(field);
+
+        // Calculate the height
+        var height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+                    + parseInt(computed.getPropertyValue('padding-top'), 10)
+                    + field.scrollHeight
+                    + parseInt(computed.getPropertyValue('padding-bottom'), 10)
+                    + parseInt(computed.getPropertyValue('border-bottom-width'), 10);
+
+        field.style.height = height + 'px';
+    }
+            document.addEventListener('DOMContentLoaded', function() {
+        // Get the input field
+        var input = document.getElementById("search-bar");
+
+        // Execute a function when the user releases a key on the keyboard
+        input.addEventListener("keydown", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("search-button").click();
+            }
+        });
+        });
+
+    </script>
+
 </head>
-<body style="background-color: #CFCFC4;">
+<body>
+    <div class="outer-container">
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search...">
+            <button class="search-button" onclick="searchFunction()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+    
+    
+
     <div class="flex-container">
         <div class="flex-item" id="friends-container">
             <h2>Friends:</h2>
