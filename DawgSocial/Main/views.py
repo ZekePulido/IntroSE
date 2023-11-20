@@ -48,6 +48,14 @@ def dashboard(request):
         'userprofile': userprofile,
         'posts': all_posts,
     }
+    favorited_posts = Post.objects.filter(favorited_by=request.user)
+
+    context = {
+        'userprofile': userprofile,
+        'posts': posts,
+        'favorited_posts': favorited_posts,
+
+    }
     return render(request, 'Main/dashboard.html', context)
 
 @login_required

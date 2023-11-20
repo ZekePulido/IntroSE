@@ -7,6 +7,198 @@
     align-items: center;
     margin: 0;
 }
+body {
+    background-color: #F4F4F4;
+    font-family: Arial, sans-serif;
+}
+
+
+.flex-container {
+    display: flex;
+    align-items: start; /* Align at the top */
+    padding: 20px;
+}
+body {
+    background-color: #F4F4F4;
+    font-family: Arial, sans-serif;
+}
+
+
+.flex-container {
+    display: flex;
+    align-items: start; /* Align at the top */
+    padding: 20px;
+}
+body {
+    background-color: #F4F4F4;
+    font-family: Arial, sans-serif;
+}
+
+
+.flex-container {
+    display: flex;
+    align-items: start; /* Align at the top */
+    padding: 20px;
+}
+body {
+    background-color: #F4F4F4;
+    font-family: Arial, sans-serif;
+}
+
+
+.flex-container {
+    display: flex;
+    align-items: start; /* Align at the top */
+    padding: 20px;
+}
+
+.flex-item {
+    margin: 10px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+#friends-container ul, #posts-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#friends-container li, #posts-container li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+#posts-container .list-group-item {
+    border: none;
+}
+
+.profile-image {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+}
+
+.post-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.flex-item {
+    margin: 10px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+#friends-container ul, #posts-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#friends-container li, #posts-container li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+#posts-container .list-group-item {
+    border: none;
+}
+
+.profile-image {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+}
+
+.post-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.flex-item {
+    margin: 10px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+#friends-container ul, #posts-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#friends-container li, #posts-container li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+#posts-container .list-group-item {
+    border: none;
+}
+
+.profile-image {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+}
+
+.post-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.flex-item {
+    margin: 10px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+#friends-container ul, #posts-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#friends-container li, #posts-container li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+#posts-container .list-group-item {
+    border: none;
+}
+
+.profile-image {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+}
+
+.post-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}
 
 .flex-item{
     flex: 1;
@@ -54,11 +246,127 @@
 }
 
 
+
+/* Additional Styles */
+
+#friends-container ul, #posts-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#friends-container li, #posts-container li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+#posts-container .list-group-item {
+    border: none;
+}
+
+.post-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+
+/* General styling for the flex-container */
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping to ensure the sidebar remains visible */
+    gap: 10px; /* Spacing between flex items */
+    margin: 0 auto;
+    max-width: 1200px; /* Set a max-width for larger screens */
+}
+
+/* Styling the friends list section */
+#friends-container {
+    flex: 0 0 200px; /* Do not grow, do not shrink, start at 200px */
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow-y: auto; /* Enable scrolling if content is long */
+}
+
+#friends-container h2 {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
+}
+
+#friends-container h2:before {
+    content: '\f500'; /* FontAwesome user-friends icon unicode */
+    font-family: 'Font Awesome 5 Free';
+    padding-right: 10px;
+}
+
+<<<<<<< Updated upstream
+=======
+}
+
+#friends-container h2:before {
+    content: '\f500'; /* FontAwesome user-friends icon unicode */
+    font-family: 'Font Awesome 5 Free';
+    padding-right: 10px;
+}
+
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+#friends-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#friends-container li {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+#friends-container li:before {
+    content: '\f007'; /* FontAwesome user icon unicode */
+    font-family: 'Font Awesome 5 Free';
+    padding-right: 10px;
+}
+
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+/* Styling for the posts section */
+#posts-container {
+    flex: 1; /* Take up the remaining space */
+    max-height: 600px; /* Set a max height for the scroll */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .flex-container {
         flex-direction: column;
     }
-    .flex-item {
-        width: 100%;
+    
+    #friends-container, #posts-container {
+        flex: 1 0 auto; /* Allow the containers to grow and shrink as needed */
     }
 }
+
+/* Ensure that the FontAwesome icons are loaded */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
