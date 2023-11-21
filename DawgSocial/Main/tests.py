@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 from .forms import RegisterForm
-from .models import Friend_Request
+from .models import Friend_Request, Profile
 
 class LoginTest(TestCase):
     def setUp(self):
@@ -70,6 +70,9 @@ class FriendRequestTests(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='password123')
         self.user2 = User.objects.create_user(username='user2', password='password123')
+
+        Profile.objects.create(user=self.user1)
+        Profile.objects.create(user=self.user2)
 
         self.friend_request = Friend_Request.objects.create(from_user=self.user1, to_user=self.user2)
 
