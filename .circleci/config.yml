@@ -32,3 +32,10 @@ workflows:
             branches:
               only:
                 - main
+            tags:
+              ignore: /.*/
+            pull_requests:
+              types:
+                - opened
+                - synchronize
+
