@@ -1,4 +1,5 @@
 # DawgSocial: A Facebook-like social media platform:
+[![Django CI](https://github.com/ZekePulido/IntroSE/actions/workflows/django.yml/badge.svg)](https://github.com/ZekePulido/IntroSE/actions/workflows/django.yml)
 ![Logo](https://github.com/spencerg11/IntroSE/assets/117400405/f1907416-dd39-4302-a656-62c75d9ee01e)
 
 ## Description:
@@ -63,8 +64,3 @@ It is currently deployed on render here: https://dawgsocial.onrender.com
 *Name*: Ezekiel Pulido   *username*: ZekePulido *netid*: esp139 <br>
 *Name*: Andrew McBride   *username*: ahm228     *netid*: ahm228 <br>
 *Name*: Ruth Mfon-Uko    *username*: ruthmfon   *netid*: rkm254 <br>
-
-[![cci-tprbo](https://circleci.com/gh/cci-tprbo/IntroSE/tree/main.svg?style=svg)](https://circleci.com/gh/cci-tprbo/IntroSE/tree/main)
-
-
-
