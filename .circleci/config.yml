@@ -6,12 +6,19 @@ jobs:
       - image: python:3.8
     steps:
       - checkout
-      - run:
-          name: "Change to DawgSocial directory"
-          command: "cd DawgSocial"
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: "Install dependencies"
           command: "pip install -r requirements.txt"
+      - save_cache:
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          paths:
+            - "/usr/local/lib/python3.8/site-packages"
+      - run:
+          name: "Change to DawgSocial directory"
+          command: "cd DawgSocial"
       - run:
           name: "Run tests"
           command: "python manage.py test"
