@@ -18,10 +18,10 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  test:
     jobs:
       - run-tests:
           filters:
             branches:
               only:
-                - main  
+                - main
