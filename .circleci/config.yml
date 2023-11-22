@@ -1,25 +1,27 @@
 version: 2.1
 
 jobs:
-  test:
+  run-tests:
     docker:
       - image: python:3.8
-    working_directory: ~/project/DawgSocial
     steps:
       - checkout
       - run:
-          name: Install Dependencies
-          command: |
-            cd DawgSocial
-            pip install -r requirements.txt
+          name: "Change to DawgSocial directory"
+          command: "cd DawgSocial"
       - run:
-          name: Run Tests
-          command: |
-            cd DawgSocial
-            python manage.py test
+          name: "Install dependencies"
+          command: "pip install -r requirements.txt"
+      - run:
+          name: "Run tests"
+          command: "python manage.py test"
 
 workflows:
   version: 2
-  build_and_test:
+  test:
     jobs:
-      - test
+      - run-tests:
+          filters:
+            branches:
+              only:
+                - main
