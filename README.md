@@ -65,4 +65,3 @@ It is currently deployed on render here: https://dawgsocial.onrender.com
 *Name*: Ruth Mfon-Uko    *username*: ruthmfon   *netid*: rkm254 <br>
 
 [![CircleCI](https://circleci.com/gh/cci-tprbo/IntroSE/tree/main.svg?style=svg)](https://circleci.com/gh/cci-tprbo/IntroSE/tree/main)
-
