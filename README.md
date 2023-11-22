@@ -64,5 +64,6 @@ It is currently deployed on render here: https://dawgsocial.onrender.com
 *Name*: Andrew McBride   *username*: ahm228     *netid*: ahm228 <br>
 *Name*: Ruth Mfon-Uko    *username*: ruthmfon   *netid*: rkm254 <br>
 
-[![CircleCI](https://circleci.com/gh/cci-tprbo/IntroSE.svg?style=svg&circle-token=59b77c71ab827144d3bea10493dd96d8151e29fc)](https://circleci.com/gh/cci-tprbo/IntroSE)
+[![cci-tprbo](https://circleci.com/gh/cci-tprbo/IntroSE.svg?style=svg)](https://circleci.com/gh/cci-tprbo/IntroSE)
+
 
