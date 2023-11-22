@@ -34,9 +34,10 @@ workflows:
                 - main
             tags:
               ignore: /.*/
-            pull_requests:
-              types:
-                - opened
-                - synchronize
+          pull_requests:
+            types:
+              - opened
+              - synchronize
+
 
 
