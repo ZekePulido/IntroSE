@@ -1,32 +1,38 @@
 version: 2.1
 
 jobs:
-  say-hello:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-  run-tests:
+  build:
     docker:
       - image: python:3.8
+    working_directory: ~/project
     steps:
       - checkout
       - run:
-          name: "Install dependencies"
-          command: "pip install -r requirements.txt"
+          name: Install Dependencies
+          command: |
+            pip install -r requirements.txt
       - run:
-          name: "Run tests"
-          command: "python manage.py test"
+          name: Apply Migrations
+          command: |
+            python manage.py migrate
+  test:
+    docker:
+      - image: python:3.8
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install -r requirements.txt
+      - run:
+          name: Run Tests
+          command: |
+            python manage.py test
 
 workflows:
   version: 2
-  say-hello-workflow:
+  build_and_test:
     jobs:
-      - say-hello
-      - run-tests:
-          requires:
-            - say-hello
+      - build
+      - test
