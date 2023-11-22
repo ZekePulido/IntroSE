@@ -16,6 +16,7 @@ jobs:
           name: "Run tests"
           command: "cd DawgSocial && python manage.py test"
 
+
 workflows:
   version: 2
   test:
