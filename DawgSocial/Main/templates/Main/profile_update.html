@@ -3,8 +3,66 @@
 {% block title %}Update Profile{% endblock %}
 
 {% block content %}
+<style>
+    body {
+    background-color: #f4f4f4; 
+    font-family: 'Open Sans', sans-serif; 
+    color: #333;
+    line-height: 1.6;
+}
 
-<body style="background-color: #CFCFC4;">
+form {
+    max-width: 600px; 
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button{
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block; 
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+
+</style>
+<body>
 
 <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}

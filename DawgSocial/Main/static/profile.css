@@ -1,8 +1,3 @@
-body {
-    margin: 0;
-    padding: 0;
-}
-
 .profile-container {
     display: flex;
     flex-direction: column;
@@ -13,12 +8,12 @@ body {
 }
 
 .profile-picture {
-    width: 200px; /* Adjust the width */
-    height: 150px; /* Adjust the height */
+    width: 200px;
+    height: 150px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid black; /* Add a black border */
-    box-sizing: border-box; /* Ensures the border is included in the defined dimensions */
+    border: 3px solid black; 
+    box-sizing: border-box; 
 }
 
 #imageUpload {

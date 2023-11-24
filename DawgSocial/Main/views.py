@@ -177,7 +177,10 @@ def remove_friend(request, friend_username):
     if request.user.is_authenticated:
         try:
             friend = User.objects.get(username=friend_username)
+
             request.user.profile.friends.remove(friend)
+            friend.profile.friends.remove(request.user.profile.user)
+
         except User.DoesNotExist:
             pass 
     return redirect('accept_page')
@@ -240,14 +243,15 @@ def accept_page(request):
 def user_profile(request, username, post_id=None):
     friend = get_object_or_404(User, username=username)
     friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
-    
-    # Add a can_comment flag to each post
+    are_friends = request.user.profile.friends.filter(id=friend.id).exists()
+
     for post in friend_posts:
         post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
-
+    
     context = {
         'friend': friend,
         'friend_posts': friend_posts,
+        'are_friends': are_friends,
     }
     return render(request, 'Main/user_profile.html', context)
 
@@ -506,15 +510,15 @@ def favorited_posts(request):
 @login_required
 def user_search(request):
     query = request.GET.get('q', '')
-    if query:
-        users = User.objects.filter(username__icontains=query)
+    users = User.objects.filter(username__icontains=query)
 
-        for user in users: 
-            search = get_object_or_404(User, username=user)
-            return redirect('user_profile', username= search.username)
-   
-    else:
-       # users = User.objects.none()  # Return an empty queryset
+    if not users.exists():
+        messages.error(request, 'User not found.')  
+        return redirect('dashboard')
 
-        return render(request, 'Main/dashboard.html', {'users': users})
+    for user in users:
+        if user.username == request.user.username:
+            return redirect('profile')
+        
+        return redirect('user_profile', username=user.username)
 

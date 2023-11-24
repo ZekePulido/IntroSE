@@ -7,10 +7,155 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
 </head>
-<body style="background-color: #CFCFC4;">
+<style>
+body {
+    background-color: #f4f4f4;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.col-md-4 {
+    width: 40%;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.col-md-8 {
+    width: 60%;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.user-header img {
+    width: 180px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: block;
+    border: 5px solid #e7e7e7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-header h2 {
+    text-align: center;
+    font-weight: normal;
+    color: #333;
+}
+
+.user-birthday, .user-bio, .user-posts {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-birthday h2, .user-bio h2, .user-posts h2 {
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.no-bio {
+    color: #888;
+}
+
+.list-group-item {
+    background: #f9f9f9;
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.post-info {
+    margin-bottom: 20px;
+}
+
+.post-info img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+}
+
+.like-button, .dislike-button, .favorite-button, .share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.fa-heart, .fa-thumbs-down, .fa-star, .fa-share {
+    border: none;
+    background: none;
+    color: #333333;
+}
+
+.fa-heart:hover, .fa-thumbs-down:hover, .fa-star:hover, .fa-share:hover {
+    color: #0056b3;
+}
+
+.comments-section h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #007bff;
+
+}
+
+.comments-section ul {
+    padding-left: 0;
+}
+
+.comments-section li {
+    list-style-type: none;
+    background: #fff;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+.comments-section form button:hover {
+    background-color: #0056b3;
+}
+
+.comments-section form textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.comments-section form button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}  
+
+
+</style>
+<body>
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <!-- User Profile Header -->
                 <header class="user-header">
                     {% if friend.profile.image %}
@@ -18,7 +163,18 @@
                     {% else %}
                         <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
                     {% endif %}
-                    <h2 class="user-fullname">{{ friend.first_name }} {{ friend.last_name }}</h2>
+                
+                    {% if not are_friends %}
+                        <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}&nbsp;<a href="{% url 'send_friend_request' friend.id %}" 
+                            class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a></h2>
+                        
+                    {% else %}
+                            <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}&nbsp;<a href="{% url 'remove_friend' friend.username %}" 
+                                class="btn btn-danger"><i class="fa-solid fa-user-minus"></i></a></h2>
+                        
+                    {% endif %}
+                   
+
                 </header>
 
                 <!-- User Birthday Section -->
@@ -36,15 +192,18 @@
                     {% endif %}
                 </section>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <section class="user-posts">
-                    <h2>User's Posts:</h2>
+                    <h2 >{{ friend.username }}'s Posts:</h2>
                     <ul class="list-group">
                         {% for post in friend_posts %}
                             <li class="list-group-item">
                                 <div class="post-info">
                                     {% if post.content %}
-                                        <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
+                                        {% if post.shared_user %}
+                                        <p>Reposted from: {{ post.shared_user.username }}</p>
+                                        {% endif %}
+                                        <img src="{{ post.content.url }}" style="max-width: 300px; max-height: 300px;" alt="Post media file">
                                     {% else %}
                                         <p>Post not available</p>
                                     {% endif %}
@@ -82,7 +241,7 @@
                                     </form>
     
                                     <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p>
-                                    <p>Date posted: {{ post.created_at|date:"F d, Y" }}</p>
+                                    <p>Posted on: {{ post.created_at|date:"F d, Y" }}</p>
                                 </div>
                                 <!-- Comments Section -->
                                 <div class="comments-section">
