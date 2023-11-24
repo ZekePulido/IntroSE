@@ -9,7 +9,7 @@ django-crispy-forms==2.0
 fabio==2023.6.0
 fontawesome==5.10.1.post1
 fontawesomefree==6.4.2
-fonttools==4.0.0
+fonttools>=4.22.0
 gunicorn==21.2.0
 h5py==3.8.0
 kiwisolver==1.4.5

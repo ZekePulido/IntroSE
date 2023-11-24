@@ -1,4 +1,5 @@
 # DawgSocial: A Facebook-like social media platform:
+[![Django CI](https://github.com/ZekePulido/IntroSE/actions/workflows/django.yml/badge.svg)](https://github.com/ZekePulido/IntroSE/actions/workflows/django.yml)
 ![Logo](https://github.com/spencerg11/IntroSE/assets/117400405/f1907416-dd39-4302-a656-62c75d9ee01e)
 
 ## Description:
