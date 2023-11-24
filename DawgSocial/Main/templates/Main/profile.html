@@ -6,6 +6,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
+   
 </head>
 <body style="background-color: #CFCFC4;">
     <div class="container">
@@ -14,7 +15,7 @@
                 <!-- User Profile Header -->
                 <header class="user-header">
                     <h1>Welcome, {{ user.username }}!<a href="{% url 'profile_update' %}" style="font-size: 25px;"><i class="fa-solid fa-pen-to-square"></i></a></h1>
-                    
+                
                     {% if userprofile.image %}
                     <img src="{{ userprofile.image.url }}" style="max-width: 150px; max-height: 150px;">
                     {% else %}
@@ -59,6 +60,7 @@
                                     {% endif %}
                                     <p>{{ post.caption }}</p>
                                     <p>{{ post.created_at|date:"F d, Y H:i:s" }}</p>
+                                    
                                 </div>
                                 {% if post.user == request.user %}
                                     <div class="post-actions">

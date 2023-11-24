@@ -23,19 +23,19 @@
             font-family: Arial, sans-serif;
         }
         .search-container {
-            max-width: 1200px; /* or the width of your flex-container */
             margin: 20px auto;
             padding: 10px;
             text-align: center; /* Center the search bar */
             display: flex;
             justify-content: center; /* This will center the child elements (your input and button) horizontally */
             padding: 10px 0; 
+            width: auto;
         }
 
         #search-bar {
             padding: 10px;
             margin-right: 10px; /* Add some space between the input and the button */
-            width: 100%; /* You can adjust the width as needed */
+            width: 60%; /* You can adjust the width as needed */
             border: 1px solid #ccc;
             border-radius: 10px;
         }
@@ -53,16 +53,6 @@
             background-color: #0056b3;
         }
     
-
-        #search-bar, .search-button {
-            margin: 0 5px; /* Optional: add some space between the input and button */
-        }
-
-/* If you want to center the search-container itself within another container, ensure that container is also a flex container or uses text-align: center */
-        .outer-container {
-            display: flex;
-            justify-content: center; /* Center children horizontally */
-        }
 
         .flex-item {
             margin: 10px;
@@ -89,7 +79,8 @@
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid #E0E0E0;
-
+            margin-top: 0%;
+            overflow-y: auto; 
         }
 
         #posts-container .list-group-item {
@@ -99,6 +90,7 @@
             flex: 4;
             max-height: 600px; 
             overflow-y: auto; 
+            margin-top: 0%;
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid #E0E0E0;
@@ -139,6 +131,13 @@
 
     </style>
     <script>
+    function showSuccessToast(message) {
+        toastr.success(message);
+    }
+
+    function showErrorToast(message) {
+        toastr.error(message);
+    }
 
     document.addEventListener('input', function (event) {
         if (event.target.tagName.toLowerCase() !== 'textarea') return;
@@ -178,21 +177,14 @@
         });
 
     </script>
-
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 </head>
 <body>
-    <div class="outer-container">
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Search...">
-            <button class="search-button" onclick="searchFunction()"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-    </div>
-    
-    
+
+            <!--check if it's empty, if it is throw error-->
+            <form class="search-container" action="{% url 'user_search' %}" method="get">
+                <input type="text" id="search-bar" name="q" placeholder="Search users...">
+                <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
 
     <div class="flex-container">
         <div class="flex-item" id="friends-container">

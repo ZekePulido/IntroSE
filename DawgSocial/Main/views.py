@@ -56,14 +56,7 @@ def dashboard(request):
         'favorited_posts': favorited_posts,
 
     }
-    favorited_posts = Post.objects.filter(favorited_by=request.user)
-
-    context = {
-        'userprofile': userprofile,
-        'posts': posts,
-        'favorited_posts': favorited_posts,
-
-    }
+    
     return render(request, 'Main/dashboard.html', context)
 
 @login_required
@@ -324,16 +317,15 @@ def like_u(request, username, post_id=None):
 def share_post(request, post_id):
     original_post = get_object_or_404(Post, id=post_id)
     #Allow repost once
-    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+    if Post.objects.filter(shared_user=original_post.user, user=request.user, content=original_post.content).exists():
         messages.error(request, "You have already shared this post.")
         print("You have already shared this post.")
-        return redirect('dashboard')
+        return redirect('profile')
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
             form = ShareForm(request.POST)
             if form.is_valid():
                 shared_caption = form.cleaned_data.get('caption', '')
-
                 new_post = Post(
                     content = original_post.content,
                     shared_caption=shared_caption,
@@ -342,7 +334,7 @@ def share_post(request, post_id):
                     shared_user=original_post.user
                 )
                 new_post.save()
-                return redirect('dashboard')
+                return redirect('profile')
 
         else:
             form = ShareForm(initial={'post_id':post_id})
@@ -510,3 +502,19 @@ def favorited_posts(request):
         'favorited_posts': favorited_posts,
     }
     return render(request, 'Main/favorited_posts.html', context)
+
+@login_required
+def user_search(request):
+    query = request.GET.get('q', '')
+    if query:
+        users = User.objects.filter(username__icontains=query)
+
+        for user in users: 
+            search = get_object_or_404(User, username=user)
+            return redirect('user_profile', username= search.username)
+   
+    else:
+       # users = User.objects.none()  # Return an empty queryset
+
+        return render(request, 'Main/dashboard.html', {'users': users})
+
