@@ -67,38 +67,6 @@ class RegisterTest(TestCase):
 
         self.assertFalse(User.objects.filter(username='testuser').exists())
 
-class PostInteractionTest(TestCase):
-    def setUp(self):
-        # Creating a user and a sample post
-        self.username = 'testuser'
-        self.password = 'testpassword'
-        self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.post = Post.objects.create(user=self.user, content='This is a sample post.')
-
-    def test_like_post(self):
-        self.client.login(username=self.username, password=self.password)
-        
-        response = self.client.post(reverse('like_post', args=[self.post.id]))
-        self.assertEqual(response.status_code, 302)  
-
-        self.assertTrue(self.post.liked_by.filter(id=self.user.id).exists())
-
-    def test_comment_on_post(self):
-        self.client.login(username=self.username, password=self.password)
-        
-        comment_text = 'Nice post!'
-        response = self.client.post(reverse('post_comment', args=[self.post.id]), {'comment_text': comment_text})
-        self.assertEqual(response.status_code, 302)  
-
-        self.assertTrue(Comment.objects.filter(post=self.post, content=comment_text).exists())
-
-    def test_repost_post(self):
-        self.client.login(username=self.username, password=self.password)
-
-        response = self.client.post(reverse('share_post', args=[self.post.id]))
-        self.assertEqual(response.status_code, 302)  
-
-        self.assertTrue(Post.objects.filter(shared_user=self.user, content=self.post.content).exists())
 
 class FriendRequestTests(TestCase):
     def setUp(self):

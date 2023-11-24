@@ -7,151 +7,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
 </head>
-<style>
-body {
-    background-color: #f4f4f4;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -15px;
-}
-
-.col-md-4 {
-    width: 40%;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.col-md-8 {
-    width: 60%;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.user-header img {
-    width: 180px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 20px auto;
-    display: block;
-    border: 5px solid #e7e7e7;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.user-header h2 {
-    text-align: center;
-    font-weight: normal;
-    color: #333;
-}
-
-.user-birthday, .user-bio, .user-posts {
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.user-birthday h2, .user-bio h2, .user-posts h2 {
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.no-bio {
-    color: #888;
-}
-
-.list-group-item {
-    background: #f9f9f9;
-    margin-bottom: 15px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.post-info {
-    margin-bottom: 20px;
-}
-
-.post-info img {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 5px;
-}
-
-.like-button, .dislike-button, .favorite-button, .share-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.fa-heart, .fa-thumbs-down, .fa-star, .fa-share {
-    border: none;
-    background: none;
-    color: #333333;
-}
-
-.fa-heart:hover, .fa-thumbs-down:hover, .fa-star:hover, .fa-share:hover {
-    color: #0056b3;
-}
-
-.comments-section h4 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    color: #007bff;
-
-}
-
-.comments-section ul {
-    padding-left: 0;
-}
-
-.comments-section li {
-    list-style-type: none;
-    background: #fff;
-    margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-
-.comments-section form button:hover {
-    background-color: #0056b3;
-}
-
-.comments-section form textarea {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.comments-section form button {
-    margin-top: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-}  
-
-
-</style>
 <body>
     <div class="container">
         <div class="row">
@@ -163,17 +19,34 @@ body {
                     {% else %}
                         <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
                     {% endif %}
+
                 
                     {% if not are_friends %}
-                        <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}&nbsp;<a href="{% url 'send_friend_request' friend.id %}" 
-                            class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a></h2>
-                        
+                        {% if friend_request_sent %}
+                            <!-- Show when a friend request is pending -->
+                            <h2 class="user-fullname"> {{friend.first_name}} {{friend.last_name}}
+                                <a href="{% url 'withdraw_friend_request' friend.id friend.username %}" class="btn btn-warning">
+                                    <i class="fas fa-clock"></i> Withdraw Request
+                                </a>
+                            </h2>
+                        {% else %}
+                            <!-- Show when no friend request has been sent -->
+                            <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}
+                                <a href="{% url 'send_friend_request' friend.id friend.username %}" class="btn btn-success">
+                                    <i class="fas fa-user-plus"></i> Send Friend Request
+                                </a>
+                            </h2>
+                        {% endif %}
                     {% else %}
-                            <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}&nbsp;<a href="{% url 'remove_friend' friend.username %}" 
-                                class="btn btn-danger"><i class="fa-solid fa-user-minus"></i></a></h2>
-                        
+                        <!-- Show when they are already friends -->
+                        <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}
+                            <a href="{% url 'remove_friend' friend.username %}" class="btn btn-danger">
+                                <i class="fas fa-user-minus"></i> Remove Friend
+                            </a>
+                        </h2>
                     {% endif %}
-                   
+
+                
 
                 </header>
 
