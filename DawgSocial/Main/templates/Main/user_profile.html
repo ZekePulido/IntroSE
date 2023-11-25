@@ -22,7 +22,7 @@
 
                 
                     {% if not are_friends %}
-                        {% if friend_request_sent %}
+                        {% if friend_requests_sent %}
                             <!-- Show when a friend request is pending -->
                             <h2 class="user-fullname"> {{friend.first_name}} {{friend.last_name}}
                                 <a href="{% url 'withdraw_friend_request' friend.id friend.username %}" class="btn btn-warning">
