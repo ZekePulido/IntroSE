@@ -353,7 +353,7 @@ def share_post_u(request,username, post_id):
     original_post = get_object_or_404(Post, id=post_id)
     form = ShareForm()
     #Allow repost once
-    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+    if Post.objects.filter(shared_user=original_post.user, user=request.user, content=original_post.content).exists():
         messages.error(request, "You have already shared this post.")
         return redirect('user_profile_u', username=friend.username, post_id=post_id)
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
