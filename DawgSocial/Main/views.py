@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
+from django.core.serializers import serialize
 import os
 
 # Create your views here.
@@ -43,18 +44,14 @@ def dashboard(request):
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
     all_posts = (posts | reposts).distinct().order_by('-created_at')
-    
-    context = {
-        'userprofile': userprofile,
-        'posts': all_posts,
-    }
+    all_users= serialize('json',User.objects.all())
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
     context = {
         'userprofile': userprofile,
         'posts': all_posts,
         'favorited_posts': favorited_posts,
-
+        'all_users':all_users,
     }
     
     return render(request, 'Main/dashboard.html', context)

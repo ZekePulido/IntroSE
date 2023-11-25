@@ -8,6 +8,147 @@
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
 </head>
 
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.col-md-4 {
+    width: 40%;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.col-md-8 {
+    width: 60%;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.user-header img {
+    width: 180px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: block;
+    border: 5px solid #e7e7e7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-header h2 {
+    text-align: center;
+    font-weight: normal;
+    color: #333;
+}
+
+.user-birthday, .user-bio, .user-posts {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-birthday h2, .user-bio h2, .user-posts h2 {
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.no-bio {
+    color: #888;
+}
+
+.list-group-item {
+    background: #f9f9f9;
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.post-info {
+    margin-bottom: 20px;
+}
+
+.post-info img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+}
+
+.like-button, .dislike-button, .favorite-button, .share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.fa-heart, .fa-thumbs-down, .fa-star, .fa-share {
+    border: none;
+    background: none;
+    color: #333333;
+}
+
+.fa-heart:hover, .fa-thumbs-down:hover, .fa-star:hover, .fa-share:hover {
+    color: #0056b3;
+}
+
+.comments-section h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #007bff;
+
+}
+
+.comments-section ul {
+    padding-left: 0;
+}
+
+.comments-section li {
+    list-style-type: none;
+    background: #fff;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+.comments-section form button:hover {
+    background-color: #0056b3;
+}
+
+.comments-section form textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.comments-section form button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}  
+.blur-profile {
+    filter: blur(15px);
+}
+
+</style>
 <body>
     <div class="container">
         <div class="row">
@@ -65,7 +206,7 @@
                     {% endif %}
                 </section>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 {% if not are_friends %}blur-profile{% endif %}">
                 <section class="user-posts">
                     <h2 >{{ friend.username }}'s Posts:</h2>
                     <ul class="list-group">
@@ -140,7 +281,8 @@
                 </section>
             </div>
         </div>
-    </div>
+        </div>
+
 </body>
 </html>
 {% endblock %}

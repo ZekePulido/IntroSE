@@ -36,16 +36,22 @@
 </head>
 <body>
 
-    <form class="search-container" action="{% url 'user_search' %}" method="get" onsubmit="return validateForm();">
+    <form class="search-container" action="{% url 'user_search' %}" method="get" ondblclick="validateForm();" onsubmit="return validateForm();">
         <input type="text" id="search-bar" name="q" placeholder="Search users..." required>
         <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
-    
+    {{ all_users |json_script:"all-users" }} 
     <script>
+
     function validateForm() {
         var searchInput = document.getElementById('search-bar').value.trim();
+        var all_users = JSON.parse(document.getElementById('all-users').textContent);
         if(searchInput === '') {
             return false;
+        }
+        if (!all_users.includes(searchInput)){
+            alert("Sorry, we couldn’t find a user with that name.");
+            return;
         }
         return true;
     }
