@@ -20,7 +20,7 @@ class Post(models.Model):
     shared_caption = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    shared_at = models.DateTimeField(auto_now_add=True)  # Use auto_now_add for the initial shared time
+    shared_at = models.DateTimeField(auto_now_add=True)  
     liked_by = models.ManyToManyField(User, related_name='liked_posts')
     disliked_by = models.ManyToManyField(User, related_name='disliked_posts')
 

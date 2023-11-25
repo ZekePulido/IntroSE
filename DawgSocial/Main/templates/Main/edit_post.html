@@ -1,26 +1,72 @@
 {% extends 'Main/base.html' %}
 
 {% block content %}
-<body style="background-color: #CFCFC4;">
+<style>
+body {
+    background-color: #f4f4f4; 
+    font-family: 'Open Sans', sans-serif; 
+    color: #333;
+    line-height: 1.6;
+}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <!-- Render content input (with file accept attributes for images and videos) -->
-    <label for="{{ form.content.id_for_label }}">Upload New Post:</label>
-    {{ form.content }}
-    
-    <!-- Display the current uploaded file as an image, if it exists -->
-    {% if form.instance.content %}
-    <img src="{{ form.instance.content.url }}" style="max-width: 100px; max-height: 100px;"alt="Current media file">
-    {% endif %}
-     
-    <!-- Render caption textarea -->
-    <label for="{{ form.caption.id_for_label }}">Edit Caption:</label>
-    {{ form.caption }}
-    
-    <button type="submit">Save Changes</button>
-</form>
+.post-form {
+    width: 80%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.save-btn {
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block; 
+    margin-top: 20px;
+}
+
+.save-btn:hover {
+    background-color: #0056b3;
+}
+</style>
+<body>
+
+    <form method="post" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}" class="form-label">Upload New Post:</label>
+            <input type="file" name="{{ form.content.name }}"id="{{ form.content.id_for_label }}" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.caption.id_for_label }}" class="form-label">Edit Caption:</label>
+            {{ form.caption }}
+        </div>
+        
+        <button type="submit" class="save-btn">Save Changes</button>
+    </form>
 
 </body>
 {% endblock %}

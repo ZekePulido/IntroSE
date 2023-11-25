@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
+from django.core.serializers import serialize
 import os
 
 # Create your views here.
@@ -43,18 +44,16 @@ def dashboard(request):
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
     all_posts = (posts | reposts).distinct().order_by('-created_at')
-    
-    context = {
-        'userprofile': userprofile,
-        'posts': all_posts,
-    }
+    all_users= serialize('json',User.objects.all())
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
     context = {
         'userprofile': userprofile,
         'posts': all_posts,
         'favorited_posts': favorited_posts,
+        'all_users':all_users,
     }
+    
     return render(request, 'Main/dashboard.html', context)
 
 @login_required
@@ -175,7 +174,10 @@ def remove_friend(request, friend_username):
     if request.user.is_authenticated:
         try:
             friend = User.objects.get(username=friend_username)
+
             request.user.profile.friends.remove(friend)
+            friend.profile.friends.remove(request.user.profile.user)
+
         except User.DoesNotExist:
             pass 
     return redirect('accept_page')
@@ -238,14 +240,15 @@ def accept_page(request):
 def user_profile(request, username, post_id=None):
     friend = get_object_or_404(User, username=username)
     friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
-    
-    # Add a can_comment flag to each post
+    are_friends = request.user.profile.friends.filter(id=friend.id).exists()
+
     for post in friend_posts:
         post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
-
+    
     context = {
         'friend': friend,
         'friend_posts': friend_posts,
+        'are_friends': are_friends,
     }
     return render(request, 'Main/user_profile.html', context)
 
@@ -314,17 +317,16 @@ def like_u(request, username, post_id=None):
 @login_required
 def share_post(request, post_id):
     original_post = get_object_or_404(Post, id=post_id)
+    form = ShareForm()
     #Allow repost once
-    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+    if Post.objects.filter(shared_user=original_post.user, user=request.user, content=original_post.content).exists():
         messages.error(request, "You have already shared this post.")
-        print("You have already shared this post.")
-        return redirect('dashboard')
+        return redirect('profile')
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
             form = ShareForm(request.POST)
             if form.is_valid():
                 shared_caption = form.cleaned_data.get('caption', '')
-
                 new_post = Post(
                     content = original_post.content,
                     shared_caption=shared_caption,
@@ -333,8 +335,7 @@ def share_post(request, post_id):
                     shared_user=original_post.user
                 )
                 new_post.save()
-
-                return redirect('dashboard')
+                return redirect('profile')
 
         else:
             form = ShareForm(initial={'post_id':post_id})
@@ -346,10 +347,10 @@ def share_post(request, post_id):
 def share_post_u(request,username, post_id):
     friend = get_object_or_404(User, username=username)
     original_post = get_object_or_404(Post, id=post_id)
+    form = ShareForm()
     #Allow repost once
-    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+    if Post.objects.filter(shared_user=original_post.user, user=request.user, content=original_post.content).exists():
         messages.error(request, "You have already shared this post.")
-        print("You have already shared this post.")
         return redirect('user_profile_u', username=friend.username, post_id=post_id)
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
@@ -502,3 +503,19 @@ def favorited_posts(request):
         'favorited_posts': favorited_posts,
     }
     return render(request, 'Main/favorited_posts.html', context)
+
+@login_required
+def user_search(request):
+    query = request.GET.get('q', '')
+    users = User.objects.filter(username__icontains=query)
+
+    if not users.exists():
+        messages.error(request, 'User not found.')  
+        return redirect('dashboard')
+
+    for user in users:
+        if user.username == request.user.username:
+            return redirect('profile')
+        
+        return redirect('user_profile', username=user.username)
+
