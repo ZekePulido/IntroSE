@@ -158,8 +158,7 @@ def send_friend_request(request, user_id, username):
 
 
 @login_required
-def  accept_friend_request(request, requestID, username):
-    friend = get_object_or_404(User, username=username)
+def  accept_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
     if friend_request.to_user == request.user:
         friend_request.to_user.profile.friends.add(friend_request.from_user)
@@ -169,7 +168,7 @@ def  accept_friend_request(request, requestID, username):
     else:
         messages.error(request, 'Friend request not accepted')
 
-    return redirect('user_profile', friend)
+    return redirect('friend_request')
 
 @login_required
 def remove_friend(request, friend_username):
@@ -221,7 +220,7 @@ def viewing_page(request):
     return render(request, 'Main/all_users.html', context)
 
 @login_required
-def accept_page(request):
+def friend_request(request):
     friends = request.user.profile.friends.all()
     friend_requests_received = Friend_Request.objects.filter(to_user=request.user)
     friend_requests_sent = Friend_Request.objects.filter(from_user=request.user)
@@ -238,7 +237,7 @@ def accept_page(request):
         if friend_request.from_user in friends:
             friend_request.delete()
 
-    return render(request, 'Main/accept_users.html', context)
+    return render(request, 'Main/friend_requests.html', context)
 
 @login_required
 def user_profile(request, username, post_id=None):

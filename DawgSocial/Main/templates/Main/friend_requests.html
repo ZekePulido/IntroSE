@@ -21,8 +21,8 @@
                     {% if friend_request.id is not None %}
                     <h1>{{ friend_request.from_user.username }}
                         <div class="button-container">
-                            <a href="{% url 'accept_friend_request' friend_request.id friend.username%}" class="btn btn-success">Accept friend request</a>
-                            <a href="{% url 'reject_friend_request' friend_request.id friend.username%}" class="btn btn-danger">Reject friend request</a>
+                            <a href="{% url 'accept_friend_request' friend_request.id%}" class="btn btn-success">Accept friend request</a>
+                            <a href="{% url 'reject_friend_request' friend_request.id%}" class="btn btn-danger">Reject friend request</a>
                         </div>
                     </h1>
                     {% endif %}
