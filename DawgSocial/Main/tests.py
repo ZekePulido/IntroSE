@@ -69,36 +69,58 @@ class RegisterTest(TestCase):
 
 class PostInteractionTest(TestCase):
     def setUp(self):
-        # Creating a user and a sample post
-        self.username = 'testuser'
-        self.password = 'testpassword'
+        # Creating different user scenarios and a sample post
+        self.username='testuser'
+        self.password='testpassword'
         self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.friend = User.objects.create_user(username='frienduser', password='friendpassword')
+        self.non_friend = User.objects.create_user(username='non_frienduser', password='non_friendpassword')
+        
+        Profile.objects.create(user=self.friend)
+        Profile.objects.create(user=self.user)
+        Profile.objects.create(user=self.non_friend)
+
+        self.user.profile.friends.add(self.friend)
+        self.friend.profile.friends.add(self.user)
+
         self.post = Post.objects.create(user=self.user, content='This is a sample post.')
 
-    def test_like_post(self):
+    def test_like(self):
         self.client.login(username=self.username, password=self.password)
-        
-        response = self.client.post(reverse('like_post', args=[self.post.id]))
+        response = self.client.post(reverse('like', args=(self.post.id,)), {'post_id': self.post.id})
         self.assertEqual(response.status_code, 302)  
-
+        self.post.refresh_from_db()
         self.assertTrue(self.post.liked_by.filter(id=self.user.id).exists())
 
-    def test_comment_on_post(self):
-        self.client.login(username=self.username, password=self.password)
-        
-        comment_text = 'Nice post!'
-        response = self.client.post(reverse('post_comment', args=[self.post.id]), {'comment_text': comment_text})
+    def test_post_comment_friend(self):     
+        self.client.login(username='frienduser', password='friendpassword')
+        comment_content = 'Nice post!' 
+        response = self.client.post(reverse('post_comment', args=(self.post.id,)), {'comment_content': comment_content})
         self.assertEqual(response.status_code, 302)  
+        self.post.refresh_from_db()
+        self.assertTrue(Comment.objects.filter(post=self.post, content=comment_content).exists())
 
-        self.assertTrue(Comment.objects.filter(post=self.post, content=comment_text).exists())
-
-    def test_repost_post(self):
-        self.client.login(username=self.username, password=self.password)
-
-        response = self.client.post(reverse('share_post', args=[self.post.id]))
-        self.assertEqual(response.status_code, 302)  
-
+    def test_share_post_friend(self):    
+        self.client.login(username='frienduser', password='friendpassword')
+        response = self.client.post(reverse('share_post', args=(self.post.id,)))
+        self.assertEqual(response.status_code, 302) 
+        self.post.refresh_from_db()
         self.assertTrue(Post.objects.filter(shared_user=self.user, content=self.post.content).exists())
+
+    def test_share_post_nonfriend(self):       #a non friend shouldn't share a post
+        self.client.login(username='non_frienduser', password='non_friendpassword')
+        response = self.client.post(reverse('share_post', args=(self.post.id,)))
+        self.assertEqual(response.status_code, 200) 
+        self.post.refresh_from_db()
+        self.assertFalse(Post.objects.filter(shared_user=self.user, content=self.post.content).exists())
+
+    def test_post_comment_nonfriend(self):     #a non friend shouldn't comment on a post
+        self.client.login(username='non_frienduser', password='non_friendpassword')
+        comment_text = 'Nice post!'
+        response = self.client.post(reverse('post_comment', args=(self.post.id,)), {'comment_content': comment_text})
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Comment.objects.filter(post=self.post, content=comment_text).exists())
+
 
 class FriendRequestTests(TestCase):
     def setUp(self):

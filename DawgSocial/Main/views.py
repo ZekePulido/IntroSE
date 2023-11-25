@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
+from django.core.serializers import serialize
 import os
 
 # Create your views here.
@@ -43,18 +44,14 @@ def dashboard(request):
     posts = Post.objects.filter(user__profile__friends=request.user).prefetch_related('comments')
     reposts = Post.objects.filter(shared_user=request.user).prefetch_related('comments')
     all_posts = (posts | reposts).distinct().order_by('-created_at')
-    
-    context = {
-        'userprofile': userprofile,
-        'posts': all_posts,
-    }
+    all_users= serialize('json',User.objects.all())
     favorited_posts = Post.objects.filter(favorited_by=request.user)
 
     context = {
         'userprofile': userprofile,
         'posts': all_posts,
         'favorited_posts': favorited_posts,
-
+        'all_users':all_users,
     }
     
     return render(request, 'Main/dashboard.html', context)
@@ -320,10 +317,10 @@ def like_u(request, username, post_id=None):
 @login_required
 def share_post(request, post_id):
     original_post = get_object_or_404(Post, id=post_id)
+    form = ShareForm()
     #Allow repost once
     if Post.objects.filter(shared_user=original_post.user, user=request.user, content=original_post.content).exists():
         messages.error(request, "You have already shared this post.")
-        print("You have already shared this post.")
         return redirect('profile')
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
@@ -350,10 +347,10 @@ def share_post(request, post_id):
 def share_post_u(request,username, post_id):
     friend = get_object_or_404(User, username=username)
     original_post = get_object_or_404(Post, id=post_id)
+    form = ShareForm()
     #Allow repost once
-    if Post.objects.filter(shared_user=original_post.user, user=request.user).exists():
+    if Post.objects.filter(shared_user=original_post.user, user=request.user, content=original_post.content).exists():
         messages.error(request, "You have already shared this post.")
-        print("You have already shared this post.")
         return redirect('user_profile_u', username=friend.username, post_id=post_id)
     if request.user.profile.friends.filter(id=original_post.user.id).exists():
         if request.method == 'POST':
