@@ -23,6 +23,7 @@
                         <div class="button-container">
                             <a href="{% url 'accept_friend_request' friend_request.id%}" class="btn btn-success">Accept friend request</a>
                             <a href="{% url 'reject_friend_request' friend_request.id%}" class="btn btn-danger">Reject friend request</a>
+                            <a href="{% url 'withdraw_friend_request' friend_request.id%}"class="bth btn-warning">Withdraw friend request</a>
                         </div>
                     </h1>
                     {% endif %}
