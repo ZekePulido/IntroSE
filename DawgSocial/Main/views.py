@@ -184,8 +184,7 @@ def remove_friend(request, friend_username):
     return redirect('user_profile', friend_username)
 
 @login_required
-def reject_friend_request(request, requestID, username):
-    friend = get_object_or_404(User, username=username)
+def reject_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
     if friend_request.to_user == request.user:
         friend_request.delete()
@@ -193,12 +192,11 @@ def reject_friend_request(request, requestID, username):
     else:
         messages.error(request, 'Friend request not rejected')
 
-    return redirect('user_profile', friend)
+    return redirect('friend_request')
 
 
 @login_required
-def withdraw_friend_request(request, requestID, username):
-    friend = get_object_or_404(User, username=username)
+def withdraw_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
     if friend_request.from_user == request.user:
         friend_request.delete()
@@ -206,7 +204,7 @@ def withdraw_friend_request(request, requestID, username):
     else:
         messages.error(request, 'Friend request not withdrawn')
 
-    return redirect('user_profile', friend)
+    return redirect('friend_request')
 
 
 @login_required
@@ -238,6 +236,7 @@ def friend_request(request):
             friend_request.delete()
 
     return render(request, 'Main/friend_requests.html', context)
+
 
 @login_required
 def user_profile(request, username, post_id=None):
