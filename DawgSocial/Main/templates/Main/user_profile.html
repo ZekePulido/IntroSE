@@ -149,7 +149,9 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
 }  
-
+.blur-profile {
+    filter: blur(15px);
+}
 
 </style>
 <body>
@@ -192,7 +194,7 @@ body {
                     {% endif %}
                 </section>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 {% if not are_friends %}blur-profile{% endif %}">
                 <section class="user-posts">
                     <h2 >{{ friend.username }}'s Posts:</h2>
                     <ul class="list-group">
@@ -267,7 +269,8 @@ body {
                 </section>
             </div>
         </div>
-    </div>
+        </div>
+
 </body>
 </html>
 {% endblock %}
