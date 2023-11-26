@@ -140,7 +140,8 @@ def delete_post(request, post_id):
     return render(request, 'Main/delete_post.html', {'post':post})
 
 @login_required
-def send_friend_request(request, user_id):
+def send_friend_request(request, user_id, username):
+    friend = get_object_or_404(User, username=username)
     to_user = User.objects.get(id=user_id)
     from_user = request.user
     if to_user != from_user:
@@ -153,7 +154,7 @@ def send_friend_request(request, user_id):
             messages.info(request, 'Friend request already sent.')
 
 
-    return redirect('accept_page')
+    return redirect('user_profile', friend)
 
 
 @login_required
@@ -167,7 +168,7 @@ def  accept_friend_request(request, requestID):
     else:
         messages.error(request, 'Friend request not accepted')
 
-    return redirect('accept_page')
+    return redirect('friend_request')
 
 @login_required
 def remove_friend(request, friend_username):
@@ -180,7 +181,7 @@ def remove_friend(request, friend_username):
 
         except User.DoesNotExist:
             pass 
-    return redirect('accept_page')
+    return redirect('user_profile', friend_username)
 
 @login_required
 def reject_friend_request(request, requestID):
@@ -191,7 +192,7 @@ def reject_friend_request(request, requestID):
     else:
         messages.error(request, 'Friend request not rejected')
 
-    return redirect('accept_page')
+    return redirect('friend_request')
 
 
 @login_required
@@ -203,7 +204,7 @@ def withdraw_friend_request(request, requestID):
     else:
         messages.error(request, 'Friend request not withdrawn')
 
-    return redirect('accept_page')
+    return redirect('friend_request')
 
 
 @login_required
@@ -217,7 +218,7 @@ def viewing_page(request):
     return render(request, 'Main/all_users.html', context)
 
 @login_required
-def accept_page(request):
+def friend_request(request):
     friends = request.user.profile.friends.all()
     friend_requests_received = Friend_Request.objects.filter(to_user=request.user)
     friend_requests_sent = Friend_Request.objects.filter(from_user=request.user)
@@ -234,7 +235,8 @@ def accept_page(request):
         if friend_request.from_user in friends:
             friend_request.delete()
 
-    return render(request, 'Main/accept_users.html', context)
+    return render(request, 'Main/friend_requests.html', context)
+
 
 @login_required
 def user_profile(request, username, post_id=None):

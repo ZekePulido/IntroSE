@@ -6,164 +6,22 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
 </head>
 <style>
+    .user-posts {
+        max-height: 500px; /* Adjust the max height as needed */
+        overflow-y: auto;
+    }
 
-body {
-    background-color: #f4f4f4;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
+    /* Additional styles for the scrollable posts section */
+    .user-posts .list-group {
+        margin-bottom: 0; /* Remove default bottom margin for better alignment */
+    }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -15px;
-}
-
-.col-md-4 {
-    width: 40%;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.col-md-8 {
-    width: 60%;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.user-header img {
-    width: 180px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 20px auto;
-    display: block;
-    border: 5px solid #e7e7e7;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.user-header h2 {
-    text-align: center;
-    font-weight: normal;
-    color: #333;
-}
-
-.user-birthday, .user-bio, .user-posts {
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.user-birthday h2, .user-bio h2, .user-posts h2 {
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.no-bio {
-    color: #888;
-}
-
-.list-group-item {
-    background: #f9f9f9;
-    margin-bottom: 15px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.post-info {
-    margin-bottom: 20px;
-}
-
-.post-info img {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 5px;
-}
-
-.like-button, .dislike-button, .favorite-button, .share-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
-}
-#update-profile-button{
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px; 
-    cursor: pointer;
-    transition: background-color 0.3s ease; 
-}
-#update-profile-button:hover{
-    background-color: #0056b3; 
-}
-.fa-heart, .fa-thumbs-down, .fa-star, .fa-share {
-    border: none;
-    background: none;
-    color: #333333;
-}
-
-.fa-heart:hover, .fa-thumbs-down:hover, .fa-star:hover, .fa-share:hover {
-    color: #0056b3;
-}
-
-.comments-section h4 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    color: #007bff;
-
-}
-
-.comments-section ul {
-    padding-left: 0;
-}
-
-.comments-section li {
-    list-style-type: none;
-    background: #fff;
-    margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-
-.comments-section form button:hover {
-    background-color: #0056b3;
-}
-
-.comments-section form textarea {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.comments-section form button {
-    margin-top: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-}  
-
-
-</style>
+    .user-posts .list-group-item {
+        border-bottom: none; /* Remove bottom border of each post item */
+    }
 </style>
 <body>
     <div class="container">
@@ -211,7 +69,7 @@ body {
                                     <p>Reposted from: {{ post.shared_user.username }}</p>
                                     {% endif %}
                                     {% if post.content %}
-                                        <img src="{{ post.content.url }}" style="max-width: 300px; max-height: 300px;" alt="Post media file">
+                                        <img src="{{ post.content.url }}" style="max-width: 200px; max-height: 200px;" alt="Post media file">
                                     {% else %}
                                         <p>Post not available</p>
                                     {% endif %}

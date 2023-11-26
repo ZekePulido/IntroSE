@@ -6,7 +6,24 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
+    <style>
+        .user-posts {
+            max-height: 500px; /* Adjust the max height as needed */
+            overflow-y: auto;
+        }
+
+        /* Additional styles for the scrollable posts section */
+        .user-posts .list-group {
+            margin-bottom: 0; /* Remove default bottom margin for better alignment */
+        }
+
+        .user-posts .list-group-item {
+            border-bottom: none; /* Remove bottom border of each post item */
+        }
+    </style>
 </head>
+<<<<<<< HEAD
+=======
 <style>
 body {
     background-color: #f4f4f4;
@@ -152,11 +169,11 @@ body {
 }
 
 </style>
+>>>>>>> 53859925913a2b2f1aaa79c98e77e97715092daf
 <body>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <!-- User Profile Header -->
                 <header class="user-header">
                     {% if friend.profile.image %}
                         <img src="{{ friend.profile.image.url }}" style="max-width: 150px; max-height: 150px;">
@@ -165,16 +182,29 @@ body {
                     {% endif %}
                 
                     {% if not are_friends %}
-                        <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}&nbsp;<a href="{% url 'send_friend_request' friend.id %}" 
-                            class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a></h2>
-                        
+                        {% if friend_requests_sent %}
+                            <!-- Show when a friend request is pending -->
+                            <h2 class="user-fullname"> {{friend.first_name}} {{friend.last_name}}
+                                <a href="{% url 'withdraw_friend_request' friend.id friend.username %}" class="btn btn-warning">
+                                    <i class="fas fa-clock"></i> Withdraw Request
+                                </a>
+                            </h2>
+                        {% else %}
+                            <!-- Show when no friend request has been sent -->
+                            <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}
+                                <a href="{% url 'send_friend_request' friend.id friend.username %}" class="btn btn-success">
+                                    <i class="fas fa-user-plus"></i> Send Friend Request
+                                </a>
+                            </h2>
+                        {% endif %}
                     {% else %}
-                            <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}&nbsp;<a href="{% url 'remove_friend' friend.username %}" 
-                                class="btn btn-danger"><i class="fa-solid fa-user-minus"></i></a></h2>
-                        
+                        <!-- Show when they are already friends -->
+                        <h2 class="user-fullname"> {{ friend.first_name }} {{ friend.last_name }}
+                            <a href="{% url 'remove_friend' friend.username %}" class="btn btn-danger">
+                                <i class="fas fa-user-minus"></i> Remove Friend
+                            </a>
+                        </h2>
                     {% endif %}
-                   
-
                 </header>
 
                 <!-- User Birthday Section -->
@@ -193,55 +223,58 @@ body {
                 </section>
             </div>
             <div class="col-md-8 {% if not are_friends %}blur-profile{% endif %}">
+<<<<<<< HEAD
+                <!-- User Posts Section -->
+=======
+>>>>>>> 53859925913a2b2f1aaa79c98e77e97715092daf
                 <section class="user-posts">
-                    <h2 >{{ friend.username }}'s Posts:</h2>
+                    <h2>{{ friend.username }}'s Posts:</h2>
                     <ul class="list-group">
                         {% for post in friend_posts %}
                             <li class="list-group-item">
                                 <div class="post-info">
                                     {% if post.content %}
                                         {% if post.shared_user %}
-                                        <p>Reposted from: {{ post.shared_user.username }}</p>
+                                            <p>Reposted from: {{ post.shared_user.username }}</p>
                                         {% endif %}
-                                        <img src="{{ post.content.url }}" style="max-width: 300px; max-height: 300px;" alt="Post media file">
+                                        <img src="{{ post.content.url }}" style="max-width: 200px; max-height: 200px;" alt="Post media file">
+                                        <p>{{ post.caption }}</p>
+                                        <form method="post" action="{% url 'like_u' friend.username post.id  %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                            <button type="submit" class="like-button">
+                                                {% if request.user in post.liked_by.all %}<i class="fa-solid fa-heart"></i>{% else %}<i class="fa-regular fa-heart"></i>{% endif %}
+                                            </button>
+                                        </form>
+                                        <form method="post" action="{% url 'dislike_u' friend.username post.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                            <button type="submit" class="dislike-button">
+                                                {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
+                                            </button>
+                                        </form>
+    
+                                        <form method="post" action="{% url 'favorite_u' friend.username post.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                            <button type="submit" class="favorite-button">
+                                                {% if request.user in post.favorited_by.all %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}
+                                            </button>
+                                        </form>
+    
+                                        <form method="post" action="{% url 'share_post_u' friend.username post.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                            <button type="submit" class="share-button">
+                                                <i class="fa-solid fa-share"></i>
+                                            </button>
+                                        </form>
+    
+                                        <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p>
+                                        <p>Posted on: {{ post.created_at|date:"F d, Y" }}</p>
                                     {% else %}
                                         <p>Post not available</p>
                                     {% endif %}
-                                    <p>{{ post.caption }}</p>
-                                    <form method="post" action="{% url 'like_u' friend.username post.id  %}" style="display: inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="post_id" value="{{ post.id }}">
-                                        <button type="submit" class="like-button">
-                                            {% if request.user in post.liked_by.all %}<i class="fa-solid fa-heart"></i>{% else %}<i class="fa-regular fa-heart"></i>{% endif %}
-                                        </button>
-                                    </form>
-                                    <form method="post" action="{% url 'dislike_u' friend.username post.id %}" style="display: inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="post_id" value="{{ post.id }}">
-                                        <button type="submit" class="dislike-button">
-                                            {% if request.user in post.disliked_by.all %}<i class="fa-solid fa-thumbs-down"></i>{% else %}<i class="fa-regular fa-thumbs-down"></i>{% endif %}
-                                        </button>
-                                    </form>
-    
-                                    <form method="post" action="{% url 'favorite_u' friend.username post.id %}" style="display: inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="post_id" value="{{ post.id }}">
-                                        <button type="submit" class="favorite-button">
-                                            {% if request.user in post.favorited_by.all %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}
-                                        </button>
-                                    </form>
-    
-                                    
-                                    <form method="post" action="{% url 'share_post_u' friend.username post.id %}" style="display: inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="post_id" value="{{ post.id }}">
-                                        <button type="submit" class="share-button">
-                                            <i class="fa-solid fa-share"></i>
-                                        </button>
-                                    </form>
-    
-                                    <p id="like-count-{{ post.id }}">{{ post.liked_by.count }} Likes {{post.disliked_by.count }} DisLikes</p>
-                                    <p>Posted on: {{ post.created_at|date:"F d, Y" }}</p>
                                 </div>
                                 <!-- Comments Section -->
                                 <div class="comments-section">

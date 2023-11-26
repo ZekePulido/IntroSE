@@ -1,0 +1,55 @@
+<!-- friend_requests.html -->
+
+{% extends 'Main/base.html' %}
+{% load static %}
+
+{% block title %}Friend Requests{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+
+    <!-- Sent Friend Requests Section -->
+    <div class="flex-item" id="sent-friend-requests-container">
+        <div class="friend-request-box">
+            <h2>Sent Friend Requests:</h2>
+            {% if friend_requests_sent %}
+                {% for sent_friend_request in friend_requests_sent %}
+                    {% if sent_friend_request.id is not None %}
+                        <h2>{{ sent_friend_request.to_user.username }}
+                            <a href="{% url 'withdraw_friend_request' sent_friend_request.id %}" class="btn btn-warning"><i class="fa-solid fa-user-clock"></i></a>
+                        </h2>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No sent friend requests.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Received Friend Requests Section -->
+    <div class="flex-item" id="friend-requests-container">
+        <div class="friend-request-box">
+            <h2>Friend Requests:</h2>
+            {% if friend_requests_received %}
+                {% for friend_request in friend_requests_received %}
+                    {% if friend_request.id is not None %}
+                        <h2>{{ friend_request.from_user.username }}
+                            <a href="{% url 'accept_friend_request' friend_request.id %}" class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a>
+                            <a href="{% url 'reject_friend_request' friend_request.id %}" class="btn btn-danger"><i class="fa-solid fa-user-xmark"></i></a>
+                        </h2>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No friend requests.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
+{% endblock %}
