@@ -134,7 +134,7 @@ class FriendRequestTests(TestCase):
 
     def test_send_friend_request(self):
         self.client.login(username='user1', password='password123')
-        response = self.client.post(reverse('send_friend_request', kwargs={'user_id': self.user2.id}))
+        response = self.client.post(reverse('send_friend_request', kwargs={'user_id': self.user2.id, 'username': self.user2.username}))
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Friend_Request.objects.filter(from_user=self.user1, to_user=self.user2).exists())
 
