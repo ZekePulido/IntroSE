@@ -1,20 +1,41 @@
 {% extends 'Main/base.html' %}
+{% load static %}
 {% block title %}Favorited Posts{% endblock %}
 {% block content %}
-<body style="background-color: #CFCFC4;">
+<link rel="stylesheet" type="text/css" href="{% static 'favorite.css' %}">
+<div class="posts-container">
     <h2>Favorited Posts</h2>
     <ul>
         {% for post in favorited_posts %}
-            <li>
-                <p>Author: {{ post.user.username }}</p>
+            <li class="post">
+                <p>Author: <a href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a></p>
                 {% if post.content %}
                     <img src="{{ post.content.url }}" style="max-width: 100px; max-height: 100px;" alt="Post media file">
                 {% else %}
                     <p>Post not available</p>
                 {% endif %}
                 <p>{{ post.caption }}</p>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h4>Comments:</h4>
+                    <ul class="comments-list">
+                        {% for comment in post.comments.all %}
+                            <li class="comment">{{ comment.user.username }}: {{ comment.content }}</li>
+                        {% empty %}
+                            <li>No comments yet.</li>
+                        {% endfor %}
+                    </ul>
+                    {% if post.can_comment %}
+                        <form method="post" action="{% url 'post_comment' post.id %}" class="comment-form">
+                            {% csrf_token %}
+                            <textarea name="comment_content" placeholder="Add a comment..."></textarea>
+                            <button type="submit">Comment</button>
+                        </form>
+                    {% endif %}
+                </div>
             </li>
         {% endfor %}
     </ul>
-</body>
+</div>
 {% endblock %}
