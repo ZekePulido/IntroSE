@@ -92,6 +92,20 @@ class PostInteractionTest(TestCase):
         self.post.refresh_from_db()
         self.assertTrue(self.post.liked_by.filter(id=self.user.id).exists())
 
+    def test_dislike(self):
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(reverse('dislike', args=(self.post.id,)), {'post_id': self.post.id})
+        self.assertEqual(response.status_code, 302)  
+        self.post.refresh_from_db()
+        self.assertTrue(self.post.disliked_by.filter(id=self.user.id).exists())
+
+    def test_favorite(self):
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(reverse('favorite', args=(self.post.id,)), {'post_id': self.post.id})
+        self.assertEqual(response.status_code, 302)  
+        self.post.refresh_from_db()
+        self.assertTrue(self.post.favorited_by.filter(id=self.user.id).exists())
+
     def test_post_comment_friend(self):     
         self.client.login(username='frienduser', password='friendpassword')
         comment_content = 'Nice post!' 
