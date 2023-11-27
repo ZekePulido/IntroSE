@@ -11,12 +11,37 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard.css' %}">
 </head>
+<style>
+
+.friend-request-box h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.friend-request-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+</style>
 <body>
 
     <!-- Sent Friend Requests Section -->
     <div class="flex-item" id="sent-friend-requests-container">
         <div class="friend-request-box">
-            <h2>Sent Friend Requests:</h2>
+            <h2>Pending Friend Requests:</h2>
             {% if friend_requests_sent %}
                 {% for sent_friend_request in friend_requests_sent %}
                     {% if sent_friend_request.id is not None %}

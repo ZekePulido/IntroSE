@@ -8,22 +8,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}">
     <style>
         .user-posts {
-            max-height: 500px; /* Adjust the max height as needed */
+            max-height: 650px; 
             overflow-y: auto;
         }
 
-        /* Additional styles for the scrollable posts section */
-        .user-posts .list-group {
-            margin-bottom: 0; /* Remove default bottom margin for better alignment */
-        }
 
-        .user-posts .list-group-item {
-            border-bottom: none; /* Remove bottom border of each post item */
-        }
     </style>
 </head>
-<<<<<<< HEAD
-=======
 <style>
 body {
     background-color: #f4f4f4;
@@ -169,7 +160,6 @@ body {
 }
 
 </style>
->>>>>>> 53859925913a2b2f1aaa79c98e77e97715092daf
 <body>
     <div class="container">
         <div class="row">
@@ -182,10 +172,10 @@ body {
                     {% endif %}
                 
                     {% if not are_friends %}
-                        {% if friend_requests_sent %}
+                        {% if friend_request_id %}
                             <!-- Show when a friend request is pending -->
-                            <h2 class="user-fullname"> {{friend.first_name}} {{friend.last_name}}
-                                <a href="{% url 'withdraw_friend_request' friend.id friend.username %}" class="btn btn-warning">
+                            <h2 class="user-fullname"> {{friend.first_name}} {{ friend.last_name }}
+                                <a href="{% url 'withdraw_friend_request' friend_request_id %}" class="btn btn-warning">
                                     <i class="fas fa-clock"></i> Withdraw Request
                                 </a>
                             </h2>
@@ -223,10 +213,7 @@ body {
                 </section>
             </div>
             <div class="col-md-8 {% if not are_friends %}blur-profile{% endif %}">
-<<<<<<< HEAD
                 <!-- User Posts Section -->
-=======
->>>>>>> 53859925913a2b2f1aaa79c98e77e97715092daf
                 <section class="user-posts">
                     <h2>{{ friend.username }}'s Posts:</h2>
                     <ul class="list-group">
