@@ -243,15 +243,23 @@ def user_profile(request, username, post_id=None):
     friend = get_object_or_404(User, username=username)
     friend_posts = Post.objects.filter(user=friend).prefetch_related('comments')
     are_friends = request.user.profile.friends.filter(id=friend.id).exists()
+    friend_requests_sent = Friend_Request.objects.filter(from_user=request.user)
+    friend_request_id = None 
 
     for post in friend_posts:
         post.can_comment = request.user.profile.friends.filter(id=post.user.id).exists()
-    
+    for requests in friend_requests_sent:
+        if requests.to_user.username == friend.username:
+            friend_request_id=requests.id
+            break
     context = {
         'friend': friend,
         'friend_posts': friend_posts,
         'are_friends': are_friends,
+        'friend_requests_sent': friend_requests_sent,
+        'friend_request_id':friend_request_id,
     }
+
     return render(request, 'Main/user_profile.html', context)
 
 @csrf_protect
