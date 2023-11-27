@@ -168,7 +168,7 @@ body {
                     {% if friend.profile.image %}
                         <img src="{{ friend.profile.image.url }}" style="max-width: 150px; max-height: 150px;">
                     {% else %}
-                        <img src="{% static 'default-avatar.png' %}" style="max-width: 150px; max-height: 150px;" alt="Default Avatar">
+                        <img src="{% static 'default-avatar.png' %}" style="max-width: 200px; max-height: 200px;" alt="Default Avatar">
                     {% endif %}
                 
                     {% if not are_friends %}
@@ -268,7 +268,12 @@ body {
                                     <h4>Comments:</h4>
                                     <ul>
                                         {% for comment in post.comments.all %}
-                                            <li>{{ comment.user.username }}: {{ comment.content }}</li>
+                                            <li>{{ comment.user.username }}: {{ comment.content }}
+                                                {% if comment.user == request.user %}
+                                                    <a href="{% url 'delete_comment' comment.id %}"><i class="fa-solid fa-trash"></i></a>
+                                                {% endif %}
+                                            </li>
+                                            
                                         {% empty %}
                                             <li>No comments yet.</li>
                                         {% endfor %}
