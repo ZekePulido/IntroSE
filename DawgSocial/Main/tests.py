@@ -175,3 +175,41 @@ class FriendRequestTests(TestCase):
         self.user1.delete()
         self.user2.delete()
 
+class PostTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+
+    def test_create_post(self):
+        self.client.login(username='testuser', password='testpassword')
+
+        response = self.client.post(reverse('create_post'), {'caption': 'Test caption'})
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertTrue(Post.objects.filter(user=self.user, caption='Test caption').exists())
+
+
+
+    def test_edit_post(self):
+        post = Post.objects.create(user=self.user, caption='Original caption')
+
+        self.client.login(username='testuser', password='testpassword')
+
+        response = self.client.post(reverse('edit_post', args=[post.id]), {'caption': 'Updated caption'})
+
+        self.assertEqual(response.status_code, 302)
+
+        post.refresh_from_db()
+        self.assertEqual(post.caption, 'Updated caption')
+
+
+    def test_delete_post(self):
+        post = Post.objects.create(user=self.user, content='Test content', caption='Test caption')
+
+        self.client.login(username='testuser', password='testpassword')
+
+        response = self.client.post(reverse('delete_post', args=[post.id]), {'delete_choice': 'yes'})
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertFalse(Post.objects.filter(id=post.id).exists())
