@@ -18,11 +18,11 @@ them to be friends with others and enable them to interact with them.
 friends.
 
 ## Features:
-- Able to log in.
+- Able to log in and register.
 - Able to accept and reject friend requests.
 - Able to compose, edit, and post status on their timeline.
 - Able to interact with friends upon accepting their friend requests.
-- Able to like, comment, and share the status/timeline posts of their friends.
+- Able to like, dislike, save, comment, and share the status/timeline posts of their friends.
 
 ## Language: Python and Technique: Agile
 
@@ -56,8 +56,6 @@ To run this application you need to run this command inside of the DawgSocial fo
 ```
 py manage.py runserver
 ```
-## Deployment:
-It is currently deployed on render here: https://dawgsocial.onrender.com
 
 ## Authors
 *Name*: Spencer Gililand *username*: spencerg11 *netid*: rsg196 <br>
