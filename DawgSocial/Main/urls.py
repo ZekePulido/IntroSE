@@ -34,7 +34,6 @@ urlpatterns = [
     path('favorite_u/<str:username>/<int:post_id>/', views.favorite_u, name='favorite_u'),
     path('favorited_posts', views.favorited_posts, name='favorited_posts'),
     path('search/', views.user_search, name='user_search'),
-
 ]
 
 if settings.DEBUG:
