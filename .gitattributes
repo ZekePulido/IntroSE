@@ -1,2 +1,5 @@
-admin/* linguist-vendored
-fontawesomefree/* linguist-vendored
+# .gitattributes
+
+# Exclude the "admin" and "fontawesomefree" folders
+DawgSocial/DawgSocial/staticfiles/admin/* linguist-vendored
+DawgSocial/DawgSocial/staticfiles/fontawesomefree/* linguist-vendored
