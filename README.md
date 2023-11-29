@@ -2,6 +2,13 @@
 [![Django CI](https://github.com/ZekePulido/IntroSE/actions/workflows/django.yml/badge.svg)](https://github.com/ZekePulido/IntroSE/actions/workflows/django.yml)
 ![Logo](https://github.com/spencerg11/IntroSE/assets/117400405/f1907416-dd39-4302-a656-62c75d9ee01e)
 
+## Demo:
+
+
+https://github.com/ZekePulido/IntroSE/assets/73547936/3b929f77-dcd8-44e2-bcac-f44d3ce69712
+
+
+
 ## Description:
 This project will be a Facebook-like social media platform that has many of the same features that Facebook has. It will have things like accounts, friends, and the ability to like, comment, and share other people's posts.
 
